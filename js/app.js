@@ -817,9 +817,12 @@ async function generarInstrumentoDiagnostico() {
   const idEvaluacion = localStorage.getItem("evaluacion_id_actual");
 
   // Lógica actual de generación local (para mostrar la tabla en pantalla)
-  ev.instrumento = ev.itemsDiagnosticos.map((texto, i) => ({
+  // FIX: Asegurar que existe el array source
+  const fuenteItems = ev.itemsDiagnosticos || ev.evidencias || [];
+
+  ev.instrumento = fuenteItems.map((texto, i) => ({
     item: i + 1,
-    evidencia: texto,
+    evidencia: typeof texto === 'string' ? texto : texto.enunciado || "Ítem sin texto",
     niveles: {
       inicio: "No logra el desempeño descrito",
       proceso: "Logra el desempeño con apoyo",

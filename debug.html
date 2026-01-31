@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Diagnóstico de API</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            color: #333;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        pre {
+            background: #f4f4f4;
+            padding: 15px;
+            border: 1px solid #ddd;
+            margin-top: 20px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Herramienta de Diagnóstico</h1>
+    <p>Esta página prueba la conexión con el servidor y la base de datos.</p>
+    <button onclick="checkApi()">🔄 PROBAR CONEXIÓN AHORA</button>
+
+    <h3>Resultado:</h3>
+    <pre id="output">Esperando prueba...</pre>
+
+    <script>
+        async function checkApi() {
+            const out = document.getElementById('output');
+            out.textContent = "Conectando con /api/evaluaciones...";
+
+            try {
+                // Intentamos hacer un GET simple
+                const res = await fetch('/api/evaluaciones');
+                const status = res.status;
+                let body;
+
+                try {
+                    body = await res.json();
+                } catch (e) {
+                    body = await res.text();
+                }
+
+                const reporte = {
+                    status: status,
+                    ok: res.ok,
+                    datos_recibidos: body
+                };
+
+                out.textContent = JSON.stringify(reporte, null, 2);
+
+                if (status === 500) {
+                    out.style.background = "#ffebee";
+                    out.style.border = "2px solid red";
+                    if (body.env_check === "URL FALTANTE") {
+                        alert("🔴 DIAGNÓSTICO: Faltan las variables de entorno.\n\nDebes configurar DATABASE_URL en Vercel o en tu archivo .env local.");
+                    }
+                } else if (status === 200) {
+                    out.style.background = "#e8f5e9";
+                    out.style.border = "2px solid green";
+                    alert("🟢 ¡CONEXIÓN EXITOSA! La base de datos responde.");
+                }
+
+            } catch (error) {
+                out.textContent = "Error de Red (Posiblemente no se está ejecutando el servidor):\n" + error.message;
+                out.style.background = "#fff3e0";
+            }
+        }
+
+        // Ejecutar automáticamente al abrir
+        window.onload = checkApi;
+    </script>
+</body>
+
+</html>

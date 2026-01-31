@@ -59,7 +59,11 @@ export default async function handler(req, res) {
         }
 
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ error: "Error interno del servidor" });
+        console.error("Error detallado en API Evaluaciones:", error);
+        return res.status(500).json({
+            error: "Error interno del servidor",
+            detalle: error.message, // Esto nos dirá si es "password authentication failed" o "env variable missing"
+            env_check: process.env.DATABASE_URL ? "URL Configurada" : "URL FALTANTE"
+        });
     }
 }

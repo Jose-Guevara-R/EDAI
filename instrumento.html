@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <title>Instrumento Diagnóstico</title>
@@ -8,86 +9,88 @@
 
 <body onload="inicializarInstrumento()">
 
-<main class="container">
-  <h2>Instrumento de Evaluación Diagnóstica</h2>
+  <main class="container">
+    <h2>Instrumento de Evaluación Diagnóstica</h2>
 
-  <!-- DATOS GENERALES -->
-  <div class="card">
-    <p><strong>Institución:</strong> <span id="inst"></span></p>
-    <p><strong>Área:</strong> <span id="area"></span></p>
-    <p><strong>Grado y ciclo:</strong> <span id="grado"></span> – <span id="ciclo"></span></p>
-    <p><strong>Instrumentos seleccionados:</strong></p>
-    <ul id="listaInstrumentos"></ul>
-  </div>
+    <!-- DATOS GENERALES -->
+    <div class="card">
+      <p><strong>Institución:</strong> <span id="inst"></span></p>
+      <p><strong>Área:</strong> <span id="area"></span></p>
+      <p><strong>Grado y ciclo:</strong> <span id="grado"></span> – <span id="ciclo"></span></p>
+      <p><strong>Instrumentos seleccionados:</strong></p>
+      <ul id="listaInstrumentos"></ul>
+    </div>
 
-  <!-- TABLA DEL INSTRUMENTO -->
-  <div class="card">
-    <table border="1" width="100%" cellspacing="0" cellpadding="6">
-      <thead>
-        <tr>
-          <th>N°</th>
-          <th>Criterio / Evidencia</th>
-          <th>Inicio</th>
-          <th>Proceso</th>
-          <th>Logro</th>
-        </tr>
-      </thead>
-      <tbody id="tablaInstrumento">
-      </tbody>
-    </table>
+    <!-- TABLA DEL INSTRUMENTO -->
+    <div class="card">
+      <table border="1" width="100%" cellspacing="0" cellpadding="6">
+        <thead>
+          <tr>
+            <th>N°</th>
+            <th>Criterio / Evidencia</th>
+            <th>Inicio</th>
+            <th>Proceso</th>
+            <th>Logro</th>
+          </tr>
+        </thead>
+        <tbody id="tablaInstrumento">
+        </tbody>
+      </table>
 
-    <br>
+      <br>
 
-    <button class="btn-primary" onclick="exportarInstrumentoPDF()">
-      Exportar Instrumento en PDF
-    </button>
+      <button class="btn-primary" onclick="exportarInstrumentoPDF()">
+        Exportar Instrumento en PDF
+      </button>
 
-    <button class="btn-secondary" onclick="irAInforme()">
-      Generar informe diagnóstico
-    </button>
-  </div>
-</main>
+      <button class="btn-secondary" onclick="window.location.href='resultados.html'"
+        style="background-color: #2c3e50; color: white;">
+        Ingresar Resultados (Premium) →
+      </button>
+    </div>
+  </main>
 
-<!-- LIBRERÍA PDF -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- LIBRERÍA PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-<!-- APP -->
-<script src="js/app.js"></script>
+  <!-- APP -->
+  <script src="js/app.js"></script>
 
-<!-- SCRIPT DE INICIALIZACIÓN -->
-<script>
-  function inicializarInstrumento() {
-    const ev = JSON.parse(localStorage.getItem("evaluacionDiagnostica"));
+  <!-- SCRIPT DE INICIALIZACIÓN -->
+  <script>
+    function inicializarInstrumento() {
+      const ev = JSON.parse(localStorage.getItem("evaluacionDiagnostica"));
 
-    if (!ev) {
-      alert("No se encontró información de la evaluación.");
-      return;
+      if (!ev) {
+        alert("No se encontró información de la evaluación.");
+        return;
+      }
+
+      // Mostrar datos generales
+      document.getElementById("inst").textContent = ev.institucion;
+      document.getElementById("area").textContent = ev.area;
+      document.getElementById("grado").textContent = ev.grado;
+      document.getElementById("ciclo").textContent = ev.ciclo;
+
+      // Mostrar instrumentos seleccionados
+      const ul = document.getElementById("listaInstrumentos");
+      ul.innerHTML = "";
+      (ev.instrumentosSeleccionados || []).forEach(i => {
+        const li = document.createElement("li");
+        li.textContent = `${i.tipo} – ${i.finalidad}`;
+        ul.appendChild(li);
+      });
+
+      // Asegurar que el instrumento exista
+      if (!ev.instrumentoDiagnostico || ev.instrumentoDiagnostico.length === 0) {
+        crearInstrumentoReal();
+      }
+
+      // Mostrar tabla
+      mostrarInstrumento();
     }
-
-    // Mostrar datos generales
-    document.getElementById("inst").textContent = ev.institucion;
-    document.getElementById("area").textContent = ev.area;
-    document.getElementById("grado").textContent = ev.grado;
-    document.getElementById("ciclo").textContent = ev.ciclo;
-
-    // Mostrar instrumentos seleccionados
-    const ul = document.getElementById("listaInstrumentos");
-    ul.innerHTML = "";
-    (ev.instrumentosSeleccionados || []).forEach(i => {
-      const li = document.createElement("li");
-      li.textContent = `${i.tipo} – ${i.finalidad}`;
-      ul.appendChild(li);
-    });
-
-    // Asegurar que el instrumento exista
-    if (!ev.instrumentoDiagnostico || ev.instrumentoDiagnostico.length === 0) {
-      crearInstrumentoReal();
-    }
-
-    // Mostrar tabla
-    mostrarInstrumento();
-  }
-</script>
+  </script>
 
 </body>
+
 </html>
