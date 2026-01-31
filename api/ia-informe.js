@@ -9,6 +9,14 @@ export default async function handler(req, res) {
 
     if (req.method === 'OPTIONS') return res.status(200).end();
 
+    // DIAGNÓSTICO: Si me llaman sin datos, devuelvo estado de keys
+    if (!req.body || !req.body.evaluacion_id) {
+        return res.json({
+            hasGeminiKey: !!process.env.GEMINI_API_KEY,
+            hasGoogleKey: !!process.env.GOOGLE_GENERATIVE_AI_API_KEY
+        });
+    }
+
     const { evaluacion_id } = req.body;
 
     try {
@@ -39,27 +47,73 @@ export default async function handler(req, res) {
         });
 
         // 3. Llamar a Gemini API (Google)
-        // Se intenta usar la API real si existe la clave, sino devuelve un texto simulado.
-        const apiKey = process.env.GEMINI_API_KEY;
+        // PRIORIDAD: Google Key (la que el usuario tiene validada)
+        const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY || process.env.GEMINI_API_KEY;
+        console.log("IA Key Status:", apiKey ? "OK (Hidden)" : "Missing");
+
         let textoIA = "Nota: Para generar conclusiones automáticas reales, configura la variable GEMINI_API_KEY en tu proyecto.\n\n(Simulación)\nDe acuerdo con los resultados, se evidencia que la mayoría de estudiantes requiere acompañamiento en la identificación de elementos explícitos. Se sugiere implementar estrategias de andamiaje...";
 
         if (apiKey) {
-            try {
-                const geminiReq = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: promptContext }] }]
-                    })
-                });
-                const geminiRes = await geminiReq.json();
-                if (geminiRes.candidates && geminiRes.candidates.length > 0) {
-                    textoIA = geminiRes.candidates[0].content.parts[0].text;
+            // Actualizado para modelos 2026 detectados
+            const modelos = ['gemini-3-flash-preview', 'gemini-3-pro-preview', 'gemini-2.5-flash-preview-09-2025'];
+            let respuestaExitosa = false;
+
+            for (const modelo of modelos) {
+                console.log(`Intentando conectar con modelo: ${modelo}...`);
+
+                try {
+                    const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${apiKey}`;
+
+                    const geminiReq = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: promptContext }] }]
+                        })
+                    });
+
+                    const geminiRes = await geminiReq.json();
+
+                    if (geminiRes.candidates && geminiRes.candidates.length > 0) {
+                        textoIA = geminiRes.candidates[0].content.parts[0].text;
+                        respuestaExitosa = true;
+                        console.log(`¡Éxito con ${modelo}!`);
+                        break; // Salir del bucle si funcionó
+                    } else if (geminiRes.error) {
+                        console.warn(`Fallo con ${modelo}:`, geminiRes.error.message);
+                    }
+                } catch (errInt) {
+                    console.error(`Error de red con ${modelo}`, errInt);
                 }
-            } catch (e) {
-                console.error("Error llamando a Gemini:", e);
-                textoIA += "\n(Error de conexión con IA)";
             }
+
+            if (!respuestaExitosa) {
+                textoIA = "No se pudo conectar. Revisando modelos disponibles para esta llave (ver consola)...";
+
+                // MODO DIAGNÓSTICO: Listar modelos reales
+                try {
+                    console.log("--- INICIANDO ESCANEO DE MODELOS DISPONIBLES ---");
+                    const listUrl = `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`;
+                    const listReq = await fetch(listUrl);
+                    const listData = await listReq.json();
+
+                    if (listData.models) {
+                        console.log("Modelos permitidos para tu API Key:");
+                        listData.models.forEach(m => {
+                            if (m.name.includes("gemini")) console.log(` - ${m.name}`);
+                        });
+                        textoIA += " (Revisa la terminal para ver los modelos soportados)";
+                    } else {
+                        console.error("ERROR LISTANDO MODELOS:", JSON.stringify(listData));
+                        textoIA += ` Error: ${listData.error?.message || "Desconocido"}`;
+                    }
+                } catch (e) {
+                    console.error("Fallo total al conectar con Google:", e);
+                }
+            }
+
+        } else {
+            console.log("No se encontró API Key válida en el flujo principal.");
         }
 
         return res.status(200).json({

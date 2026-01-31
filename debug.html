@@ -64,12 +64,18 @@
                     out.style.background = "#ffebee";
                     out.style.border = "2px solid red";
                     if (body.env_check === "URL FALTANTE") {
-                        alert("🔴 DIAGNÓSTICO: Faltan las variables de entorno.\n\nDebes configurar DATABASE_URL en Vercel o en tu archivo .env local.");
+                        alert("🔴 FALTAN VARIABLES DE BD.");
                     }
-                } else if (status === 200) {
-                    out.style.background = "#e8f5e9";
-                    out.style.border = "2px solid green";
-                    alert("🟢 ¡CONEXIÓN EXITOSA! La base de datos responde.");
+                } else {
+                    // Verificación de IA
+                    if (!body.ia_key_status) {
+                        // Hacemos una llamada extra al endpoint de IA solo para checkear
+                        const iaRes = await fetch('/api/ia-informe', { method: 'POST', body: JSON.stringify({ t: 1 }) });
+                        const iaData = await iaRes.json();
+                        out.textContent += "\n\n--- DIAGNÓSTICO IA ---\n" +
+                            "¿Tiene clave GEMINI?: " + (iaData.hasGeminiKey ? "SÍ ✅" : "NO ❌") + "\n" +
+                            "¿Tiene clave GOOGLE?: " + (iaData.hasGoogleKey ? "SÍ ✅" : "NO ❌");
+                    }
                 }
 
             } catch (error) {

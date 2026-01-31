@@ -1119,6 +1119,38 @@ async function cargarMatrizResultados() {
     const columnas = data.columnas; // Array de indicadores {id, descripcion...}
     const notasPrevias = data.datosPrevios; // Array {estudiante_identificador, indicador_id, nivel_logro}
 
+    // AUTO-REPARACIÓN: Si no hay columnas en la BD pero sí tengo datos locales, sincronizar ahora.
+    if (columnas.length === 0) {
+      console.warn("⚠️ No hay indicadores en BD. Intentando sincronizar desde LocalStorage...");
+      const evLocal = obtenerEvaluacion();
+
+      // Buscamos de dónde sacar los items (itemsDiagnosticos o evidencias)
+      const itemsParaSincronizar = evLocal.itemsDiagnosticos || evLocal.evidencias || [];
+
+      if (itemsParaSincronizar.length > 0) {
+        // Convertir al formato que espera la API
+        const evidenciasSimples = itemsParaSincronizar.map(it =>
+          (typeof it === 'string') ? it : (it.enunciado || it.evidencia || "Ítem recuperado")
+        );
+
+        // Enviar a la nube
+        await fetch('/api/generar-instrumento', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            evaluacion_id: idEvaluacion,
+            evidencias_texto: evidenciasSimples
+          })
+        });
+
+        // Recargar la matriz (ahora sí debería traer datos)
+        return cargarMatrizResultados();
+      } else {
+        contenedor.innerHTML = `<p style="text-align:center; color:#666;">No se encontraron indicadores para evaluar. <br><a href="instrumento.html">Volver a generar instrumento</a></p>`;
+        return;
+      }
+    }
+
     // Mapa rápido para buscar notas existentes: "estudiante-indicador" -> nivel
     const mapaNotas = {};
     notasPrevias.forEach(n => {
@@ -1278,21 +1310,40 @@ async function cargarInformeFinal() {
       }
     });
 
-    // 4. Renderizar Tabla Simple
-    let htmlTabla = `<table class="tabla-registro" style="margin-top:0">
+    // 4. Renderizar Tabla Profesional (Premium Design)
+    let htmlTabla = `
+        <style>
+            .premium-table { width: 100%; border-collapse: separate; border-spacing: 0; font-family: 'Segoe UI', sans-serif; margin-top: 15px; }
+            .premium-table th { background: #f8f9fa; padding: 12px; font-weight: 600; text-align: center; border-bottom: 2px solid #e9ecef; color: #495057; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px; }
+            .premium-table td { padding: 12px; border-bottom: 1px solid #f1f3f5; vertical-align: middle; font-size: 0.95rem; }
+            .premium-table tr:hover td { background-color: #f8f9fa; }
+            
+            .badge-stat { display: inline-block; padding: 6px 14px; border-radius: 20px; font-weight: bold; min-width: 30px; text-align: center; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+            .bg-inicio { background-color: #ffcdd2; color: #b71c1c; }
+            .bg-proceso { background-color: #fff9c4; color: #f57f17; }
+            .bg-logro { background-color: #c8e6c9; color: #1b5e20; }
+            .bg-destacado { background-color: #bbdefb; color: #0d47a1; }
+        </style>
+        
+        <table class="premium-table">
             <thead>
                 <tr>
-                    <th>Indicador</th> <th>Inicio</th> <th>Proceso</th> <th>Logro</th> <th>Destacado</th>
+                    <th style="text-align:left; width: 45%;">Indicador / Criterio</th>
+                    <th style="color: #b71c1c;">Inicio</th>
+                    <th style="color: #f57f17;">Proceso</th>
+                    <th style="color: #1b5e20;">Logro</th>
+                    <th style="color: #0d47a1;">Destacado</th>
                 </tr>
-            </thead><tbody>`;
+            </thead>
+            <tbody>`;
 
     data.estadisticas.forEach(d => {
       htmlTabla += `<tr>
-                <td style="text-align:left;">${d.indicador}</td>
-                <td>${d.inicio}</td>
-                <td>${d.proceso}</td>
-                <td>${d.logro}</td>
-                <td>${d.destacado}</td>
+                <td style="font-weight: 500; color: #343a40;">${d.indicador}</td>
+                <td style="text-align:center;"><span class="badge-stat bg-inicio">${d.inicio}</span></td>
+                <td style="text-align:center;"><span class="badge-stat bg-proceso">${d.proceso}</span></td>
+                <td style="text-align:center;"><span class="badge-stat bg-logro">${d.logro}</span></td>
+                <td style="text-align:center;"><span class="badge-stat bg-destacado">${d.destacado}</span></td>
             </tr>`;
     });
     htmlTabla += "</tbody></table>";
