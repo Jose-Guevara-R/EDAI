@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Informe Diagnóstico</title>
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- jsPDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+<main class="container">
+  <h2>Informe de Evaluación Diagnóstica – 2026</h2>
+
+  <div class="card">
+    <h3>Datos Institucionales</h3>
+    <p><strong>Institución:</strong> <span id="infInstitucion"></span></p>
+    <p><strong>Área:</strong> <span id="infArea"></span></p>
+    <p><strong>Grado:</strong> <span id="infGrado"></span></p>
+    <p><strong>Ciclo:</strong> <span id="infCiclo"></span></p>
+
+    <h3>Contexto</h3>
+    <p><strong>Socioeconómico:</strong> <span id="infSocioeco"></span></p>
+    <p><strong>Clima socioemocional:</strong> <span id="infSocioemocional"></span></p>
+    <p><strong>Comprensión lectora:</strong> <span id="infComprension"></span></p>
+
+    <h3>Competencias evaluadas</h3>
+    <ul id="infCompetencias"></ul>
+
+    <h3>Situación significativa</h3>
+    <p id="infSituacion"></p>
+
+    <h3>Evidencias</h3>
+    <ul id="infEvidencias"></ul>
+
+    <button class="btn-primary" onclick="exportarInformePDF()">
+      📄 Exportar informe en PDF
+    </button>
+  </div>
+</main>
+
+<script src="js/app.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const ev = obtenerEvaluacion();
+
+    document.getElementById("infInstitucion").innerText = ev.institucion;
+    document.getElementById("infArea").innerText = ev.area;
+    document.getElementById("infGrado").innerText = ev.grado;
+    document.getElementById("infCiclo").innerText = ev.ciclo;
+
+    document.getElementById("infSocioeco").innerText =
+      ev.contexto.socioeconomico.join(", ");
+
+    document.getElementById("infSocioemocional").innerText =
+      ev.contexto.socioemocional;
+
+    document.getElementById("infComprension").innerText =
+      ev.contexto.comprensionLectora;
+
+    document.getElementById("infSituacion").innerText = ev.situacion;
+
+    const ulComp = document.getElementById("infCompetencias");
+    ev.competencias.forEach(c => {
+      const li = document.createElement("li");
+      li.innerText = c;
+      ulComp.appendChild(li);
+    });
+
+    const ulEvi = document.getElementById("infEvidencias");
+    ev.evidencias.forEach(e => {
+      const li = document.createElement("li");
+      li.innerText = e;
+      ulEvi.appendChild(li);
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Paso 4 – Estándares</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<main class="container">
+  <h2>Paso 4: Estándar de Aprendizaje (Automático)</h2>
+
+  <div class="card">
+    <p>
+      El estándar se ha cargado automáticamente según el área curricular
+      y el ciclo seleccionado, conforme al CNEB.
+    </p>
+
+    <label>Estándar del ciclo</label>
+    <textarea id="estandar" rows="5" readonly></textarea>
+
+    <button class="btn-primary" onclick="irASituacion()">
+      Siguiente
+    </button>
+  </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="js/app.js"></script>
+
+<script>
+  cargarEstandarAutomatico();
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Registro de Resultados - SIED Web</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    /* Estilos específicos para la sábana de notas */
+    .tabla-registro { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    .tabla-registro th, .tabla-registro td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+    .tabla-registro th { background-color: #f4f4f4; color: #333; font-size: 0.9rem; }
+    .tabla-registro td { font-size: 0.9rem; }
+    
+    .input-nota { 
+      padding: 6px; 
+      border-radius: 4px; 
+      border: 1px solid #ccc; 
+      width: 100%; 
+      max-width: 120px;
+      box-sizing: border-box; 
+      font-weight: bold;
+    }
+    
+    /* Colores semánticos para las notas (se aplicarán dinámicamente) */
+    .nota-inicio { background-color: #ffebee; color: #c62828; border-color: #ef9a9a; }  /* C */
+    .nota-proceso { background-color: #fff8e1; color: #f9a825; border-color: #ffe082; } /* B */
+    .nota-logro { background-color: #e8f5e9; color: #2e7d32; border-color: #a5d6a7; }   /* A */
+    .nota-destacado { background-color: #e3f2fd; color: #1565c0; border-color: #90caf9; } /* AD */
+
+    .resumen-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: white;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <header style="background: var(--primary); padding: 1rem; color: white;">
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+      <h1 style="margin: 0; font-size: 1.2rem;">Evaluación Diagnóstica 2026</h1>
+      <span>Modo Premium</span>
+    </div>
+  </header>
+
+  <main class="container" style="max-width: 1400px; margin-top: 2rem;"> 
+    <div class="resumen-header">
+        <div>
+            <h2>Registro de Calificaciones</h2>
+            <p>Ingrese el nivel de logro para cada estudiante por indicador.</p>
+        </div>
+        <div>
+            <span class="tag">En Nube ☁️</span>
+        </div>
+    </div>
+    
+    <div class="card">
+      
+      <!-- CONTENEDOR DE LA TABLA DINÁMICA -->
+      <div id="contenedorMatriz" style="overflow-x: auto; min-height: 200px;">
+        <p style="text-align: center; padding: 20px; color: #666;">Cargando matriz de evaluación desde la nube...</p>
+      </div>
+
+      <div style="margin-top: 30px; display: flex; gap: 15px; justify-content: flex-end; border-top: 1px solid #eee; padding-top: 20px;">
+        <button class="btn-primary" onclick="guardarResultados()">
+          Guardar Resultados
+        </button>
+        <!-- Futuro botón para IA -->
+        <button class="btn-secondary" onclick="irAInformeFinal()" id="btnInforme">
+          Generar Informe Final (IA) →
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/app.js"></script>
+  <script>
+    // Inicializar al cargar
+    document.addEventListener("DOMContentLoaded", () => {
+        // Verificar sesión
+        const id = localStorage.getItem("evaluacion_id_actual");
+        if(!id) {
+            alert("No hay una evaluación activa. Volviendo al inicio.");
+            window.location.href = "index.html";
+        } else {
+            cargarMatrizResultados();
+        }
+    });
+
+    // Función auxiliar para colorear selects al cambiar (Mejora UX)
+    function colorearSelect(select) {
+        select.className = 'input-nota'; // Reset
+        if(select.value == "1") select.classList.add('nota-inicio');
+        if(select.value == "2") select.classList.add('nota-proceso');
+        if(select.value == "3") select.classList.add('nota-logro');
+        if(select.value == "4") select.classList.add('nota-destacado');
+    }
+  </script>
+</body>
+</html>

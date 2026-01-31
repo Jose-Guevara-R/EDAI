@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Paso 6 – Evidencias de Aprendizaje</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<!-- 🔴 IMPORTANTE: sugerir evidencias al cargar -->
+<body onload="sugerirEvidencias()">
+
+<main class="container">
+  <h2>Paso 6: Evidencias de Aprendizaje</h2>
+
+  <div class="card">
+    <p>
+      Las evidencias permiten observar el nivel de desarrollo de las
+      competencias seleccionadas. Pueden ser productos, desempeños
+      o actuaciones observables y evaluables.
+    </p>
+
+    <label for="evidencias">Evidencias propuestas</label>
+    <textarea
+      id="evidencias"
+      rows="7"
+      placeholder="Ejemplo: Representa gráficamente una problemática de su comunidad y explica su propuesta...">
+    </textarea>
+
+    <!-- BOTÓN SOLO PARA VOLVER A SUGERIR -->
+    <button class="btn-secondary" onclick="sugerirEvidencias()">
+      🔁 Volver a sugerir evidencias
+    </button>
+
+    <!-- BOTÓN CLAVE: CREA EL INSTRUMENTO -->
+    <button class="btn-primary"
+      onclick="guardarEvidencias(); generarInstrumentoDiagnostico(); window.location.href='instrumento.html'">
+      🛠 Generar instrumento de evaluación diagnóstica
+    </button>
+  </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>
+

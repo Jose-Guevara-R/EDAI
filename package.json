@@ -1,0 +1,15 @@
+{
+  "name": "sied-web-premium",
+  "version": "1.0.0",
+  "description": "Sistema de Evaluación Diagnóstica con Backend Serverless",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "pg": "^8.11.3"
+  },
+  "engines": {
+    "node": ">=18.x"
+  }
+}

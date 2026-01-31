@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Paso 3 – Competencias</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<main class="container">
+  <h2>Paso 3: Definición de Competencias</h2>
+
+  <div class="card">
+    <p>
+      Seleccione las competencias que serán evaluadas en la evaluación diagnóstica,
+      según el área curricular seleccionada.
+    </p>
+
+    <div id="listaCompetencias"></div>
+
+    <button class="btn-primary" onclick="guardarCompetencias()">
+      Siguiente
+    </button>
+  </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="js/app.js"></script>
+
+<script>
+  cargarCompetencias();
+</script>
+
+</body>
+</html>

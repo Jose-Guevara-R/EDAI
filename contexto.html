@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Contexto de Aprendizaje</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<main class="container">
+  <h2>Paso 2: Contexto y Bienestar</h2>
+
+  <div class="card">
+    <h3>Contexto socioeconómico</h3>
+    <label><input type="checkbox" class="socioeco" value="Agricultura"> Agricultura</label>
+    <label><input type="checkbox" class="socioeco" value="Comercio"> Comercio</label>
+    <label><input type="checkbox" class="socioeco" value="Trabajo eventual"> Trabajo eventual</label>
+
+    <h3>Contexto sociocultural</h3>
+    <textarea id="sociocultural" rows="3"></textarea>
+
+    <h3>Clima socioemocional predominante</h3>
+    <label><input type="radio" name="clima" value="Favorable"> Favorable</label>
+    <label><input type="radio" name="clima" value="Inestable"> Inestable</label>
+    <label><input type="radio" name="clima" value="Riesgo"> Riesgo</label>
+
+    <h3>Comprensión lectora (referencial)</h3>
+    <select id="comprension">
+      <option value="">Seleccione</option>
+      <option>Básica</option>
+      <option>Intermedia</option>
+      <option>Limitada</option>
+    </select>
+
+    <button class="btn-primary" onclick="guardarContexto()">
+      Guardar contexto
+    </button>
+  </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>
+
