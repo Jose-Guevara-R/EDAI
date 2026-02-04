@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paso 7: Ficha de Evaluación - SIED</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/tutorial.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        /* Estilos específicos para la vista previa de la ficha en el editor */
+        .ficha-preview-container {
+            background: #f1f5f9;
+            padding: 40px;
+            border-radius: 24px;
+            margin-top: 20px;
+            max-height: 800px;
+            overflow-y: auto;
+            border: 2px solid var(--theme-border);
+        }
+
+        .hoja-examen {
+            background: white !important;
+            color: #1a202c !important;
+            width: 100%;
+            /* FIX: Reducir ancho máximo para crear márgenes naturales al centrar */
+            max-width: 18cm;
+            min-height: 29.7cm;
+            margin: 0 auto;
+            /* Auto margin para centrar horizontalmente */
+            padding: 2cm;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            font-family: 'Arial', sans-serif;
+            box-sizing: border-box;
+            position: relative;
+            display: block !important;
+        }
+
+        /* ... (skip unchanged lines) ... */
+
+        function imprimirFichaPDF() {
+            const element=document.getElementById('areaExamen');
+
+            // Añadir clase para modo impresión
+            element.classList.add('paper-mode');
+
+            // Opciones optimizadas para PDF centrado
+            const opt= {
+
+                margin: [0,
+                1,
+                0,
+                1],
+                // 1cm uniforme a los lados
+                filename: `Ficha_Diagnostica_$ {
+                    new Date().getTime()
+                }
+
+                .pdf`,
+                image: {
+                    type: 'jpeg', quality: 0.98
+                }
+
+                ,
+                html2canvas: {
+                    scale: 2,
+                        useCORS: true,
+                        scrollY: 0,
+                        windowWidth: 794 // Ancho exacto A4
+                }
+
+                ,
+                jsPDF: {
+                    unit: 'cm', format: 'a4', orientation: 'portrait'
+                }
+            }
+
+            ;
+
+            html2pdf().set(opt).from(element).save().then(()=> {
+                    element.classList.remove('paper-mode');
+                });
+        }
+
+        </script></body></html>

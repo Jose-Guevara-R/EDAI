@@ -1,40 +1,157 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
-  <title>Paso 5 – Situación Significativa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paso 5: Situación Significativa - SIED</title>
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/tutorial.css">
+  <link rel="stylesheet" href="css/components.css">
+  <style>
+    .ai-suggestion-box {
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+      border: 1px dashed var(--primary-color);
+      padding: 24px;
+      border-radius: 16px;
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    .ai-suggestion-box::after {
+      content: '✨ Sugerencia de la IA';
+      position: absolute;
+      top: -12px;
+      right: 20px;
+      background: var(--primary-color);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    textarea#situacion {
+      min-height: 250px;
+      font-size: 1.05rem;
+      line-height: 1.6;
+      border: 1px solid var(--theme-border);
+      background: var(--theme-card-bg);
+      color: var(--theme-text-primary);
+    }
+
+    body.dark-mode textarea#situacion {
+      background: rgba(30, 30, 46, 0.5);
+    }
+  </style>
 </head>
 
-<!-- 🔴 CLAVE: se ejecuta la sugerencia al cargar la página -->
-<body onload="sugerirSituacionAprendizaje()">
+<body class="dark-mode">
 
-<main class="container">
-  <h2>Paso 5: Situación Significativa</h2>
-
-  <div class="card">
-    <p>
-      Describe una situación contextualizada que permita observar el
-      desempeño de las competencias seleccionadas, considerando el
-      entorno sociocultural y emocional del estudiantado.
-    </p>
-
-    <label for="situacion">Situación significativa</label>
-    <textarea
-      id="situacion"
-      rows="6"
-      placeholder="Ejemplo: Los estudiantes analizan una problemática de su comunidad y proponen soluciones...">
-    </textarea>
-
-    <button class="btn-primary" onclick="irAEvidencias()">
-      Siguiente
-    </button>
+  <div class="theme-toggle" onclick="document.body.classList.toggle('dark-mode')">
+    <span class="theme-toggle-icon">🌓</span>
+    <span class="theme-toggle-text">Modo Visual</span>
   </div>
-</main>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="js/app.js"></script>
+  <div class="tutorial-layout">
+    <!-- Panel Izquierdo: Orientación Técnica -->
+    <aside class="panel-tutorial panel-tecnico">
+      <h3>🧭 Brújula Técnica</h3>
+      <div class="tutorial-content">
+        <span class="badge badge-primary" style="margin-bottom: 16px;">Paso 5 de 8</span>
 
+        <h4>Diseñar la Situación</h4>
+        <p>Una situación es significativa cuando plantea un <strong>reto o desafío</strong> que moviliza las
+          competencias de los estudiantes. Debe ser auténtica, es decir, similar a como ocurre en la vida real.</p>
+
+        <div class="alert alert-info" style="margin-top: 24px;">
+          <div class="alert-message">
+            <strong>💡 Componentes clave:</strong>
+            <ul style="margin-top: 10px; padding-left: 20px;">
+              <li><strong>Contexto:</strong> Lugar, tiempo y circunstancias.</li>
+              <li><strong>Reto:</strong> Una pregunta o tarea compleja.</li>
+              <li><strong>Producto esperado:</strong> Lo que el estudiante creará para demostrar su competencia.</li>
+            </ul>
+          </div>
+        </div>
+
+        <h4>El Enfoque 2026:</h4>
+        <p>Asegúrate de que la situación no sea solo teórica. Conéctala con los problemas locales (sequía, economía,
+          identidad) que identificaste al inicio.</p>
+      </div>
+    </aside>
+
+    <!-- Contenido Central -->
+    <main class="main-content">
+      <div class="container">
+        <header class="step-header-container">
+          <span class="step-number-badge">Paso 5</span>
+          <h1 class="step-title">Situación Significativa</h1>
+          <p class="step-subtitle">Crea el escenario pedagógico donde tus estudiantes movilizarán sus retos y saberes.
+          </p>
+        </header>
+
+        <div class="card">
+          <div class="ai-suggestion-box">
+            <p style="opacity: 0.8; font-size: 0.95rem;">Hemos redactado una propuesta basada en tu área y el contexto
+              que registraste. Puedes editarla libremente para que se ajuste mejor a tu grupo:</p>
+          </div>
+
+          <div class="form-group">
+            <label for="situacion">Redacción de la Situación:</label>
+            <textarea id="situacion" placeholder="Describe aquí el reto que plantearás a tus estudiantes..."></textarea>
+          </div>
+
+          <div class="alert alert-warning" style="margin-top: 20px;">
+            <div class="alert-message">
+              <strong>💡 Consejo:</strong> Redacta el reto en forma de pregunta: <em>¿Cómo podríamos...? ¿De qué
+                manera...?</em> Esto despierta la curiosidad y la necesidad de investigar.
+            </div>
+          </div>
+
+          <button class="btn-primary" onclick="irAEvidencias()">
+            💾 Guardar Diseño y Definir Evidencias
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Panel Derecho -->
+    <aside class="panel-tutorial panel-real">
+      <div class="ia-badge">✨ Caso Práctico</div>
+      <h3>🍎 Ejemplo Real</h3>
+      <div class="tutorial-content">
+        <span class="badge badge-warning" style="margin-bottom: 16px;">Ciencias Sociales</span>
+
+        <p><strong>Contexto:</strong> Comunidad con alta inflación de alimentos.</p>
+
+        <p style="margin-top: 15px;"><strong>La Situación:</strong> "Los estudiantes asumen el rol de 'Asesores de
+          Canasta Familiar'. Deben analizar por qué suben los precios y proponer un menú nutritivo y económico para una
+          semana, explicando sus decisiones basadas en datos económicos locales."</p>
+
+        <div class="alert alert-info" style="margin-top: 24px;">
+          <div class="alert-title">🎯 ¿Por qué es significativa?</div>
+          <div class="alert-message">
+            Porque afecta sus mesas cada día. No es un ejercicio de libro, es un problema real que requiere usar
+            historia, geografía y economía.
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script src="js/components.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    window.onload = () => {
+      if (typeof updateSteps === 'function') updateSteps(5, 8);
+
+      // La función sugerirSituacionAprendizaje() ya llena el textarea #situacion
+      sugerirSituacionAprendizaje();
+
+      if (typeof cargarTutorial === 'function') cargarTutorial();
+    };
+  </script>
 </body>
-</html>
 
+</html>

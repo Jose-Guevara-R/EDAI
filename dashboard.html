@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard SIED - Mis Evaluaciones</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .eval-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .eval-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--primary-color);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .eval-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--primary-gradient);
+        }
+
+        .eval-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .eval-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: white;
+        }
+
+        .eval-badge {
+            background: rgba(102, 126, 234, 0.2);
+            color: #a3bffa;
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .eval-info {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 25px 0;
+        }
+
+        .eval-info li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            color: #cbd5e0;
+            font-size: 0.9rem;
+        }
+
+        .eval-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .btn-card {
+            padding: 10px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-edit {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-edit:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-results {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+        }
+
+        .btn-results:hover {
+            opacity: 0.9;
+            transform: scale(1.02);
+        }
+
+        .welcome-section {
+            text-align: center;
+            padding: 60px 0;
+        }
+
+        .btn-main-add {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--secondary-gradient);
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-weight: 800;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(118, 75, 162, 0.3);
+        }
+
+        .loading-spinner {
+            text-align: center;
+            padding: 100px;
+            font-size: 1.5rem;
+            color: #a0aec0;
+        }
+    </style>
+</head>
+
+<body class="dark-mode">
+
+    <div class="container">
+        <header style="display: flex; justify-content: space-between; align-items: center; padding: 20px 0;">
+            <h1 class="logo">SIED <span>2026</span></h1>
+            <button class="btn-secondary" onclick="localStorage.clear(); location.reload();">Cerrar Sesión ⏻</button>
+        </header>
+
+        <main>
+            <div class="welcome-section">
+                <h1 class="title">Bienvenido, Docente</h1>
+                <p class="subtitle">Gestiona tus evaluaciones diagnósticas y haz seguimiento al progreso de tus
+                    estudiantes.</p>
+                <button class="btn-main-add" onclick="window.location.href='datos.html'">
+                    <span>+</span> Nueva Evaluación Diagnóstica
+                </button>
+            </div>
+
+            <div id="loading" class="loading-spinner">Obteniendo tus evaluaciones...</div>
+
+            <div class="dashboard-grid" id="evaluacionesList" style="display: none;">
+                <!-- Se llena con JS -->
+            </div>
+        </main>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            await cargarEvaluaciones();
+        });
+
+        async function cargarEvaluaciones() {
+            const listaContenedor = document.getElementById("evaluacionesList");
+            const loading = document.getElementById("loading");
+
+            try {
+                const response = await fetch('/api/evaluaciones');
+                const evaluaciones = await response.json();
+
+                loading.style.display = "none";
+                listaContenedor.style.display = "grid";
+
+                if (evaluaciones.length === 0) {
+                    listaContenedor.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 100px; background: rgba(255,255,255,0.02); border-radius: 20px;">
+              <p style="color: #718096; font-size: 1.2rem;">Aún no tienes evaluaciones creadas.</p>
+            </div>
+          `;
+                    return;
+                }
+
+                listaContenedor.innerHTML = evaluaciones.map(ev => `
+          <div class="eval-card">
+            <div class="eval-header">
+              <div class="eval-title">${ev.area}</div>
+              <span class="eval-badge">${ev.ciclo}</span>
+            </div>
+            <ul class="eval-info">
+              <li><span>IE:</span> <strong>${ev.institucion}</strong></li>
+              <li><span>Grado:</span> <strong>${ev.grado}</strong></li>
+              <li><span>Estudiantes:</span> <strong>${ev.numero_estudiantes}</strong></li>
+              <li><span>Fecha:</span> <strong>${new Date(ev.fecha_creacion).toLocaleDateString()}</strong></li>
+            </ul>
+            <div class="eval-actions">
+              <button class="btn-card btn-edit" onclick="seleccionarYContinuar('${ev.id}', 'tutorial')">Configurar</button>
+              <button class="btn-card btn-results" onclick="seleccionarYContinuar('${ev.id}', 'resultados')">Cargar Resultados</button>
+            </div>
+          </div>
+        `).join('');
+
+            } catch (error) {
+                console.error("Error cargando Dashboard:", error);
+                loading.innerHTML = "Hubo un error al conectar con la base de datos.";
+            }
+        }
+
+        async function seleccionarYContinuar(id, modo) {
+            const loading = document.getElementById("loading");
+            const grid = document.getElementById("evaluacionesList");
+
+            loading.innerHTML = "Sincronizando con Neon DB...";
+            loading.style.display = "block";
+            grid.style.opacity = "0.5";
+
+            // Llamamos a la carga y esperamos respuesta real
+            const exito = await cargarEvaluacionDesdeBD(id);
+
+            if (exito) {
+                setTimeout(() => {
+                    if (modo === 'tutorial') {
+                        window.location.href = 'contexto.html';
+                    } else if (modo === 'resultados') {
+                        window.location.href = 'resultados.html';
+                    }
+                }, 500);
+            } else {
+                loading.innerHTML = "❌ Error al conectar. Por favor, reintente.";
+                grid.style.opacity = "1";
+                alert("No se pudo recuperar la información. Verifique su conexión.");
+            }
+        }
+    </script>
+</body>
+
+</html>

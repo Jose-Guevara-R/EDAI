@@ -1,34 +1,134 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
-  <title>Evaluación Diagnóstica 2026</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal SIED 2026 - Gestión Pedagógica</title>
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/components.css">
+  <style>
+    .portal-container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+      gap: 40px;
+    }
+
+    .choice-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    .choice-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 40px;
+      text-align: center;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      text-decoration: none;
+    }
+
+    .choice-card:hover {
+      transform: translateY(-12px) scale(1.02);
+      border-color: var(--primary-color);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .choice-card i {
+      font-size: 3.5rem;
+      margin-bottom: 5px;
+    }
+
+    .choice-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: white;
+      margin: 0;
+    }
+
+    .choice-desc {
+      font-size: 1rem;
+      color: #a0aec0;
+      line-height: 1.6;
+    }
+
+    .btn-portal {
+      width: 100%;
+      padding: 16px;
+      border-radius: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: auto;
+    }
+
+    .hero-badge {
+      background: var(--primary-gradient);
+      padding: 8px 16px;
+      border-radius: 50px;
+      color: white;
+      font-weight: 700;
+      font-size: 0.8rem;
+      margin-bottom: 10px;
+    }
+
+    .logo-main {
+      text-align: center;
+    }
+  </style>
 </head>
-<body>
 
-  <main class="container">
-    <h1>Sistema Institucional de Evaluación Diagnóstica</h1>
-    <p class="subtitle">
-      Secundaria – Enfoque por competencias, bienestar socioemocional
-      y comprensión lectora
-    </p>
+<body class="dark-mode">
 
-    <div class="card">
-      <p>
-        Esta herramienta permite planificar la evaluación diagnóstica
-        siguiendo los 8 pasos oficiales del MINEDU y generar insumos
-        para la planificación curricular.
-      </p>
-
-      <button class="btn-primary" onclick="iniciar()">
-        Iniciar Evaluación Diagnóstica
-      </button>
+  <div class="portal-container">
+    <div class="logo-main">
+      <span class="hero-badge">INTELIGENCIA PEDAGÓGICA v2026</span>
+      <h1 class="logo" style="font-size: 4rem;">SIED <span>Web</span></h1>
+      <p class="subtitle">Sistema Institucional de Evaluación Diagnóstica</p>
     </div>
-  </main>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="js/app.js"></script>
+    <div class="choice-grid">
+      <!-- Opción 1: NUEVA EVALUACIÓN -->
+      <a href="datos.html" class="choice-card">
+        <i>📝</i>
+        <h2 class="choice-title">Nueva Evaluación</h2>
+        <p class="choice-desc">Inicia el proceso paso a paso para configurar el contexto, competencias y generar el
+          instrumento oficial.</p>
+        <button class="btn-portal btn-secondary">Comenzar Guía →</button>
+      </a>
 
+      <!-- Opción 2: GESTIONAR EXISTENTE (LO QUE PROPONES) -->
+      <a href="dashboard.html" class="choice-card" style="border-width: 2px;">
+        <div class="hero-badge" style="background: #48bb78;">MÁS USADO</div>
+        <i>📂</i>
+        <h2 class="choice-title">Mis Evaluaciones</h2>
+        <p class="choice-desc">Accede a tus datos guardados, elige una evaluación y procede a <strong>cargar resultados
+            o generar informes finales</strong>.</p>
+        <button class="btn-portal btn-primary">Ver Historial y Elegir →</button>
+      </a>
+    </div>
+
+    <div style="text-align: center; opacity: 0.5; font-size: 0.9rem;">
+      Desarrollado para optimizar la labor docente con enfoque por competencias.
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
 </body>
+
 </html>

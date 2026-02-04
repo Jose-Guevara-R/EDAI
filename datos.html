@@ -1,66 +1,346 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
-  <title>Datos Institucionales</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paso 1: Análisis de Insumos - SIED</title>
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/tutorial.css">
+  <link rel="stylesheet" href="css/components.css">
+  <style>
+    .insumo-item {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .insumo-label {
+      display: flex !important;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      margin: 0 !important;
+      font-weight: 600 !important;
+      color: var(--text-primary);
+    }
+
+    .insumo-detail {
+      display: none;
+      padding-left: 30px;
+      animation: slideInDown 0.3s ease-out;
+    }
+
+    .insumo-detail textarea {
+      margin-top: 5px;
+      min-height: 80px !important;
+      font-size: 0.9rem !important;
+      background: rgba(15, 23, 42, 0.4) !important;
+      border: 1px dashed var(--primary-color) !important;
+    }
+
+    @keyframes slideInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<main class="container">
-  <h2>Paso 1: Identificación Curricular</h2>
+  <div class="tutorial-layout">
+    <!-- Panel Izquierdo: Orientación Técnica MINEDU -->
+    <aside class="panel-tutorial panel-tecnico">
+      <h3>📘 Orientación Técnica</h3>
+      <div class="tutorial-content">
+        <span class="badge badge-primary" style="margin-bottom: 16px;">Paso 1 de 8</span>
 
-  <div class="card">
-    <label>Institución Educativa</label>
-    <input type="text" id="institucion">
+        <h4 style="color: var(--technical-color); margin-top: 20px;">Trazar Condiciones</h4>
+        <p>
+          Revisión de la <strong>"mochila pedagógica"</strong>: todos los insumos previos
+          que nos dan pistas sobre el nivel de desarrollo de competencias de los estudiantes.
+        </p>
 
-<label>Área Curricular</label>
-<select id="area" required>
-  <option value="">-- Seleccione --</option>
-  <option>Comunicación</option>
-  <option>Matemática</option>
-  <option>Ciencia y Tecnología</option>
-  <option>Ciencias Sociales</option>
-  <option>Desarrollo Personal, Ciudadanía y Cívica</option>
-  <option>Educación Física</option>
-  <option>Arte y Cultura</option>
-  <option>Educación para el Trabajo</option>
-  <option>Inglés</option>
-  <option>Educación Religiosa</option>
-</select>
+        <h4 style="color: var(--technical-color); margin-top: 20px;">Insumos Clave a Revisar:</h4>
+        <ul>
+          <li><strong>Informes de progreso del SIAGIE:</strong> Calificaciones y observaciones del año anterior</li>
+          <li><strong>Evaluación de Habilidades Socioemocionales:</strong> Resultados de instrumentos aplicados</li>
+          <li><strong>Portafolios de evidencias:</strong> Trabajos, proyectos y productos del grado anterior</li>
+          <li><strong>Fichas de observación:</strong> Registros anecdóticos de docentes previos</li>
+          <li><strong>Entrevistas con familias:</strong> Información del contexto familiar</li>
+        </ul>
 
+        <div class="alert alert-info" style="margin-top: 20px; font-size: 0.9rem;">
+          <div class="alert-message">
+            <strong>💡 Importante:</strong> Los insumos no son "etiquetas definitivas",
+            son puntos de partida para diseñar estrategias diferenciadas.
+          </div>
+        </div>
 
-    <label>Grado</label>
-    <select id="grado">
-      <option value="">Seleccione</option>
-      <option>1°</option>
-      <option>2°</option>
-      <option>3°</option>
-      <option>4°</option>
-      <option>5°</option>
-    </select>
+        <h4 style="color: var(--technical-color); margin-top: 20px;">Datos Institucionales</h4>
+        <p>
+          Registra la información básica que permitirá contextualizar la evaluación
+          diagnóstica y generar reportes institucionales.
+        </p>
+      </div>
+    </aside>
 
-    <label>Ciclo</label>
-    <select id="ciclo">
-      <option value="">Seleccione</option>
-      <option>Ciclo VI</option>
-      <option>Ciclo VII</option>
-    </select>
+    <!-- Contenido Central: Formulario -->
+    <main class="main-content">
+      <div class="container">
+        <header class="step-header-container">
+          <span class="step-number-badge">Paso 1</span>
+          <h1 class="step-title">Análisis de Insumos</h1>
+          <p class="step-subtitle">Revisa la "mochila pedagógica" y registra datos institucionales para el informe
+            técnico.</p>
+        </header>
 
-    <label>Número de estudiantes</label>
-    <input type="number" id="estudiantes">
+        <div class="card">
+          <!-- Alert de Pensamiento Alternativo -->
+          <div class="alert alert-warning" style="margin-bottom: 24px;">
+            <div class="alert-title">
+              <span>🔍</span>
+              Pensamiento Alternativo
+            </div>
+            <div class="alert-message">
+              <p style="margin-bottom: 8px;">
+                Al revisar los insumos previos, evita caer en sesgos:
+              </p>
+              <ul style="margin: 8px 0; padding-left: 20px;">
+                <li><strong>No etiquetes:</strong> "Este estudiante siempre ha sido malo en matemática" → "¿Qué
+                  estrategias no funcionaron antes?"</li>
+                <li><strong>Busca patrones:</strong> ¿Hay brechas comunes en el grupo? ¿Qué competencias necesitan
+                  refuerzo?</li>
+                <li><strong>Identifica fortalezas:</strong> Cada estudiante tiene algo en lo que destaca</li>
+              </ul>
+            </div>
+          </div>
 
-<button class="btn-primary"
-        onclick="if(validarDatosInstitucionales()) guardarDatosInstitucionales()">
-  Siguiente
-</button>
+          <h3>🏫 Datos Institucionales</h3>
 
+          <label>Institución Educativa</label>
+          <input type="text" id="institucion" placeholder="Ej: I.E. José María Arguedas">
+
+          <label>Área Curricular</label>
+          <select id="area" required>
+            <option value="">-- Seleccione el área --</option>
+            <option value="Comunicación">📖 Comunicación</option>
+            <option value="Matemática">🔢 Matemática</option>
+            <option value="Ciencia y Tecnología">🔬 Ciencia y Tecnología</option>
+            <option value="Ciencias Sociales">🌍 Ciencias Sociales</option>
+            <option value="Desarrollo Personal, Ciudadanía y Cívica">👥 Desarrollo Personal, Ciudadanía y Cívica
+            </option>
+            <option value="Educación Física">⚽ Educación Física</option>
+            <option value="Arte y Cultura">🎨 Arte y Cultura</option>
+            <option value="Educación para el Trabajo">💼 Educación para el Trabajo</option>
+            <option value="Inglés">🌐 Inglés</option>
+            <option value="Educación Religiosa">✝️ Educación Religiosa</option>
+          </select>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+            <div>
+              <label>Grado</label>
+              <select id="grado">
+                <option value="">Seleccione</option>
+                <option value="1">1° Secundaria</option>
+                <option value="2">2° Secundaria</option>
+                <option value="3">3° Secundaria</option>
+                <option value="4">4° Secundaria</option>
+                <option value="5">5° Secundaria</option>
+              </select>
+            </div>
+
+            <div>
+              <label>Ciclo</label>
+              <select id="ciclo">
+                <option value="">Seleccione</option>
+                <option value="VI">Ciclo VI</option>
+                <option value="VII">Ciclo VII</option>
+              </select>
+            </div>
+          </div>
+
+          <label>Número de Estudiantes</label>
+          <input type="number" id="estudiantes" placeholder="Ej: 28" min="1" max="50">
+
+          <div class="alert alert-success" style="margin-top: 24px;">
+            <div class="alert-title">
+              <span>📊</span>
+              Revisión de Insumos Previos
+            </div>
+            <div class="alert-message">
+              <p style="margin-bottom: 12px;">Antes de continuar, registra los hallazgos clave de cada insumo:</p>
+              <div style="display: grid; gap: 16px;">
+                <!-- SIAGIE -->
+                <div class="insumo-item">
+                  <label class="insumo-label">
+                    <input type="checkbox" id="check-siagie"
+                      onchange="toggleInsumoDetail('detail-siagie', this.checked)">
+                    <span>Informes de progreso del SIAGIE (Calificaciones)</span>
+                  </label>
+                  <div id="detail-siagie" class="insumo-detail">
+                    <textarea id="nota-siagie"
+                      placeholder="Ej: El 60% de estudiantes está en proceso (B) en lectura..."></textarea>
+                  </div>
+                </div>
+
+                <!-- SOCIOEMOCIONAL -->
+                <div class="insumo-item">
+                  <label class="insumo-label">
+                    <input type="checkbox" id="check-socioemocional"
+                      onchange="toggleInsumoDetail('detail-socioemocional', this.checked)">
+                    <span>Evaluación de Habilidades Socioemocionales</span>
+                  </label>
+                  <div id="detail-socioemocional" class="insumo-detail">
+                    <textarea id="nota-socioemocional"
+                      placeholder="Ej: Se observa baja tolerancia a la frustración en actividades retadoras..."></textarea>
+                  </div>
+                </div>
+
+                <!-- PORTAFOLIO -->
+                <div class="insumo-item">
+                  <label class="insumo-label">
+                    <input type="checkbox" id="check-portafolio"
+                      onchange="toggleInsumoDetail('detail-portafolio', this.checked)">
+                    <span>Portafolios de evidencias del grado anterior</span>
+                  </label>
+                  <div id="detail-portafolio" class="insumo-detail">
+                    <textarea id="nota-portafolio"
+                      placeholder="Ej: Las evidencias muestran debilidad en la argumentación de ideas..."></textarea>
+                  </div>
+                </div>
+
+                <!-- OBSERVACION -->
+                <div class="insumo-item">
+                  <label class="insumo-label">
+                    <input type="checkbox" id="check-observacion"
+                      onchange="toggleInsumoDetail('detail-observacion', this.checked)">
+                    <span>Fichas de observación o registros anecdóticos</span>
+                  </label>
+                  <div id="detail-observacion" class="insumo-detail">
+                    <textarea id="nota-observacion"
+                      placeholder="Ej: Grupo muy participativo oralmente, pero resistente a la escritura..."></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn-primary" onclick="if(validarDatosInstitucionales()) guardarDatosInstitucionales()">
+            💾 Guardar y Continuar al Paso 2
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Panel Derecho: Ejemplo Práctico -->
+    <aside class="panel-tutorial panel-real">
+      <h3>👨‍🏫 Ejemplo Práctico</h3>
+      <div class="tutorial-content">
+        <span class="badge badge-warning" style="margin-bottom: 16px;">Caso Real</span>
+
+        <h4 style="color: var(--real-color); margin-top: 20px;">Docente de Comunicación - Lima</h4>
+
+        <p>
+          <strong>Institución:</strong> I.E. "San Martín de Porres"<br>
+          <strong>Área:</strong> Comunicación<br>
+          <strong>Grado:</strong> 3° Secundaria (Ciclo VII)<br>
+          <strong>Estudiantes:</strong> 32
+        </p>
+
+        <h4 style="color: var(--real-color); margin-top: 20px;">Insumos Revisados:</h4>
+
+        <p>
+          <strong>📊 SIAGIE:</strong> El 60% de estudiantes obtuvo calificación "B" (En proceso)
+          en la competencia "Lee diversos tipos de textos" el año anterior.
+        </p>
+
+        <p>
+          <strong>💚 Socioemocional:</strong> Evaluación mostró que el 40% presenta baja autoestima
+          académica y miedo al error. Varios estudiantes evitan participar en clase.
+        </p>
+
+        <p>
+          <strong>📁 Portafolios:</strong> Los trabajos muestran dificultad para inferir información
+          implícita. Buena comprensión literal, pero limitada reflexión crítica.
+        </p>
+
+        <p>
+          <strong>📝 Observaciones:</strong> Docente anterior reportó: "Grupo participativo en
+          actividades orales, pero con resistencia a la lectura de textos extensos."
+        </p>
+
+        <div class="alert alert-info" style="margin-top: 20px; font-size: 0.9rem;">
+          <div class="alert-title">
+            <span>🎯</span>
+            Decisión Pedagógica
+          </div>
+          <div class="alert-message">
+            <p style="margin-bottom: 8px;">Con base en estos insumos, la docente decidió:</p>
+            <ul style="margin: 8px 0; padding-left: 20px;">
+              <li>Priorizar la competencia "Lee diversos tipos de textos"</li>
+              <li>Diseñar situaciones significativas con textos breves y motivadores</li>
+              <li>Implementar estrategias de andamiaje para la inferencia</li>
+              <li>Crear un clima de seguridad emocional donde el error sea parte del aprendizaje</li>
+              <li>Usar círculos de lectura cooperativa para fortalecer la confianza</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </aside>
   </div>
-</main>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="js/app.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    window.onload = () => {
+      // Actualizar indicador de pasos
+      updateSteps(1, 8);
 
+      // Auto-completar ciclo según grado seleccionado
+      document.getElementById('grado').addEventListener('change', function () {
+        const grado = parseInt(this.value);
+        const cicloSelect = document.getElementById('ciclo');
+
+        if (grado === 1 || grado === 2) {
+          cicloSelect.value = 'VI';
+        } else if (grado >= 3 && grado <= 5) {
+          cicloSelect.value = 'VII';
+        }
+      });
+
+      // Validación en tiempo real
+      const inputs = document.querySelectorAll('input[type="text"], input[type="number"], select');
+      inputs.forEach(input => {
+        input.addEventListener('blur', function () {
+          if (this.value.trim() === '') {
+            this.style.borderColor = '#f5576c';
+          } else {
+            this.style.borderColor = '#4facfe';
+          }
+        });
+      });
+    };
+
+    function toggleInsumoDetail(id, isChecked) {
+      const detail = document.getElementById(id);
+      if (isChecked) {
+        detail.style.display = 'block';
+        detail.querySelector('textarea').focus();
+      } else {
+        detail.style.display = 'none';
+      }
+    }
+  </script>
 </body>
-</html>
 
+</html>
