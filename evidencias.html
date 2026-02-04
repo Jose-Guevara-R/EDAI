@@ -1,47 +1,188 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
-  <title>Paso 6 – Evidencias de Aprendizaje</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paso 6: Evidencias de Aprendizaje - SIED</title>
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/tutorial.css">
+  <link rel="stylesheet" href="css/components.css">
+  <style>
+    .evidence-area {
+      position: relative;
+      margin-top: 24px;
+    }
+
+    textarea#evidencias {
+      min-height: 250px;
+      font-family: inherit;
+      font-size: 1.05rem;
+      line-height: 1.6;
+      padding: 24px;
+      border-radius: 20px;
+      border: 1px solid var(--theme-border);
+      background: var(--theme-card-bg);
+      color: var(--theme-text-primary);
+      box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    body.dark-mode textarea#evidencias {
+      background: rgba(30, 30, 46, 0.5);
+    }
+
+    textarea#evidencias:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    }
+
+    .action-group {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 32px;
+    }
+
+    .btn-generate {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 24px;
+      font-size: 1.25rem;
+      font-weight: 700;
+      border-radius: 20px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .btn-generate:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+    }
+
+    .btn-generate:active {
+      transform: scale(0.98);
+    }
+  </style>
 </head>
 
-<!-- 🔴 IMPORTANTE: sugerir evidencias al cargar -->
-<body onload="sugerirEvidencias()">
+<body class="dark-mode" onload="initEvidencias()">
 
-<main class="container">
-  <h2>Paso 6: Evidencias de Aprendizaje</h2>
-
-  <div class="card">
-    <p>
-      Las evidencias permiten observar el nivel de desarrollo de las
-      competencias seleccionadas. Pueden ser productos, desempeños
-      o actuaciones observables y evaluables.
-    </p>
-
-    <label for="evidencias">Evidencias propuestas</label>
-    <textarea
-      id="evidencias"
-      rows="7"
-      placeholder="Ejemplo: Representa gráficamente una problemática de su comunidad y explica su propuesta...">
-    </textarea>
-
-    <!-- BOTÓN SOLO PARA VOLVER A SUGERIR -->
-    <button class="btn-secondary" onclick="sugerirEvidencias()">
-      🔁 Volver a sugerir evidencias
-    </button>
-
-    <!-- BOTÓN CLAVE: CREA EL INSTRUMENTO -->
-    <button class="btn-primary"
-      onclick="guardarEvidencias(); generarInstrumentoDiagnostico(); window.location.href='instrumento.html'">
-      🛠 Generar instrumento de evaluación diagnóstica
-    </button>
+  <div class="theme-toggle" onclick="document.body.classList.toggle('dark-mode')">
+    <span class="theme-toggle-icon">🌓</span>
+    <span class="theme-toggle-text">Modo Visual</span>
   </div>
-</main>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="js/app.js"></script>
+  <div class="tutorial-layout">
+    <!-- Panel Izquierdo -->
+    <aside class="panel-tutorial panel-tecnico">
+      <h3>🧭 Brújula Técnica</h3>
+      <div class="tutorial-content">
+        <span class="badge badge-primary" style="margin-bottom: 16px;">Paso 6 de 8</span>
 
+        <h4>Definir las Evidencias</h4>
+        <p>Una evidencia es una producción (producto) o actuación (accionar) mediante la cual se puede observar el nivel
+          de desarrollo de la competencia.</p>
+
+        <div class="alert alert-info" style="margin-top: 24px;">
+          <div class="alert-message">
+            <strong>✅ Criterios de Calidad:</strong>
+            <ul style="margin-top: 10px; padding-left: 20px;">
+              <li><strong>Observable:</strong> ¿Puedo verla, oírla o leerla?</li>
+              <li><strong>Retadora:</strong> ¿Requiere que el alumno use sus conocimientos para resolver algo?</li>
+              <li><strong>Pertinente:</strong> ¿Tiene relación directa con la competencia elegida?</li>
+            </ul>
+          </div>
+        </div>
+
+        <p style="margin-top: 20px;"><strong>Ejemplos:</strong> Maquetas, ensayos, debates, prototipos, mapas mentales,
+          resoluciones de problemas complejos.</p>
+      </div>
+    </aside>
+
+    <!-- Contenido Central -->
+    <main class="main-content">
+      <div class="container">
+        <header class="step-header-container">
+          <span class="step-number-badge">Paso 6</span>
+          <h1 class="step-title">Evidencias de Aprendizaje</h1>
+          <p class="step-subtitle">Propón qué producto o actuación permitirá observar y valorar el nivel de desarrollo
+            de las competencias.</p>
+        </header>
+
+        <div class="card">
+          <div class="alert alert-warning" style="margin-bottom: 24px;">
+            <div class="alert-message">
+              <strong>✨ Inteligencia Pedagógica:</strong> Basado en el Standard y la Situación anterior, te proponemos
+              las siguientes evidencias. Puedes editarlas o añadir las tuyas.
+            </div>
+          </div>
+
+          <div class="evidence-area">
+            <label for="evidencias">Producciones y Actuaciones sugeridas:</label>
+            <textarea id="evidencias" placeholder="Escribe aquí las evidencias que recogerás..."></textarea>
+          </div>
+
+          <div class="action-group">
+            <button class="btn-secondary" onclick="sugerirEvidencias()"
+              style="background: rgba(255,255,255,0.1); border: 1px dashed var(--primary-color); color: var(--theme-text-primary);">
+              🔁 Regenerar Sugerencia Pedagógica
+            </button>
+
+            <button class="btn-generate" onclick="irAProcesarInstrumento()">
+              🛠 Generar Instrumento de Evaluación Diagnóstica
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Panel Derecho -->
+    <aside class="panel-tutorial panel-real">
+      <div class="ia-badge">✨ Caso Práctico</div>
+      <h3>🍎 Ejemplo Real</h3>
+      <div class="tutorial-content">
+        <span class="badge badge-warning" style="margin-bottom: 16px;">Caso Secundaria</span>
+
+        <p><strong>Situación:</strong> Problemas de contaminación hídrica local.</p>
+
+        <p style="margin-top: 15px;"><strong>La Evidencia:</strong> "Un prototipo de filtro de agua casero utilizando
+          materiales de la zona y un informe explicativo donde justifiquen su funcionamiento científico."</p>
+
+        <div class="alert alert-info" style="margin-top: 24px;">
+          <div class="alert-title">🎯 ¿Qué observamos?</div>
+          <div class="alert-message">
+            Aquí observamos <em>Indagación</em> (al diseñar el filtro) y <em>Escritura Científica</em> (en el informe).
+            Una sola evidencia bien diseñada mata dos pájaros pedagógicos de un tiro.
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script src="js/components.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    function initEvidencias() {
+      if (typeof updateSteps === 'function') updateSteps(6, 8);
+      sugerirEvidencias();
+      if (typeof cargarTutorial === 'function') cargarTutorial();
+    }
+
+    function irAProcesarInstrumento() {
+      showLoading("Preparando ficha del estudiante...");
+      setTimeout(() => {
+        guardarEvidencias();
+        window.location.href = 'ficha-estudiante.html';
+      }, 1500);
+    }
+  </script>
 </body>
-</html>
 
+</html>

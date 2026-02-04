@@ -1,37 +1,165 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
-  <title>Paso 4 – Estándares</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paso 4: El Referente (Estándar) - SIED</title>
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/tutorial.css">
+  <link rel="stylesheet" href="css/components.css">
+  <style>
+    .estandar-display {
+      background: rgba(102, 126, 234, 0.05);
+      border-left: 6px solid var(--primary-color);
+      padding: 30px;
+      border-radius: 0 20px 20px 0;
+      font-size: 1.15rem;
+      line-height: 1.8;
+      color: var(--theme-text-primary);
+      margin-bottom: 30px;
+      position: relative;
+    }
+
+    .estandar-display::before {
+      content: '“';
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 4rem;
+      color: var(--primary-color);
+      opacity: 0.1;
+      font-family: serif;
+    }
+
+    body.dark-mode .estandar-display {
+      background: rgba(139, 157, 255, 0.1);
+      border-left-color: #8b9dff;
+    }
+  </style>
 </head>
-<body>
 
-<main class="container">
-  <h2>Paso 4: Estándar de Aprendizaje (Automático)</h2>
+<body class="dark-mode">
 
-  <div class="card">
-    <p>
-      El estándar se ha cargado automáticamente según el área curricular
-      y el ciclo seleccionado, conforme al CNEB.
-    </p>
-
-    <label>Estándar del ciclo</label>
-    <textarea id="estandar" rows="5" readonly></textarea>
-
-    <button class="btn-primary" onclick="irASituacion()">
-      Siguiente
-    </button>
+  <div class="theme-toggle" onclick="document.body.classList.toggle('dark-mode')">
+    <span class="theme-toggle-icon">🌓</span>
+    <span class="theme-toggle-text">Modo Visual</span>
   </div>
-</main>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="js/app.js"></script>
+  <div class="tutorial-layout">
+    <!-- Panel Izquierdo: Orientación Técnica -->
+    <aside class="panel-tutorial panel-tecnico">
+      <h3>🧭 Brújula Técnica</h3>
+      <div class="tutorial-content">
+        <span class="badge badge-primary" style="margin-bottom: 16px;">Paso 4 de 8</span>
 
-<script>
-  cargarEstandarAutomatico();
-</script>
+        <h4>El Estándar como Referente</h4>
+        <p>Los estándares de aprendizaje son descripciones del desarrollo de la competencia en niveles de creciente
+          complejidad. Son referentes comunes para ver qué tan cerca o lejos están los estudiantes del nivel esperado.
+        </p>
 
+        <div class="alert alert-info" style="margin-top: 24px;">
+          <div class="alert-message">
+            <strong>💡 Importante:</strong> El estándar no es para el estudiante (todavía), es para tu mirada docente.
+            Te dice qué buscar en las evidencias que recogerás.
+          </div>
+        </div>
+
+        <h4>Uso Pedagógico:</h4>
+        <ul style="margin-top: 15px;">
+          <li>Define el "techo" de la evaluación.</li>
+          <li>Permite identificar si un estudiante está en inicio, proceso o logro.</li>
+          <li>Asegura la equidad: evaluamos a todos bajo el mismo referente nacional.</li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Contenido Central -->
+    <main class="main-content">
+      <div class="container">
+        <header class="step-header-container">
+          <span class="step-number-badge">Paso 4</span>
+          <h1 class="step-title">El Referente Nacional</h1>
+          <p class="step-subtitle">Visualiza el nivel de logro esperado para el ciclo seleccionado según el CNEB.</p>
+        </header>
+
+        <div class="card">
+          <div class="alert alert-success" style="margin-bottom: 32px;">
+            <div class="alert-title">
+              <span>📋</span>
+              Sincronización Automática
+            </div>
+            <div class="alert-message">
+              Hemos seleccionado el estándar oficial del CNEB según el <strong>Área</strong> y el <strong>Ciclo</strong>
+              que registraste en los pasos previos.
+            </div>
+          </div>
+
+          <h3>🏁 Nivel de Logro Esperado</h3>
+          <p style="margin-bottom: 20px; opacity: 0.8;">Este es el referente que guiará tu mirada diagnóstica:</p>
+
+          <div id="estandar-container" class="estandar-display">
+            <!-- Cargado por app.js -->
+            Cargando estándar oficial...
+          </div>
+
+          <textarea id="estandar" style="display:none;"></textarea> <!-- Hidden para compatibilidad con app.js -->
+
+          <div class="alert alert-warning">
+            <div class="alert-message">
+              <strong>Reflexión Docente:</strong> Al leer este estándar, pregúntate: ¿Qué acciones concretas demuestran
+              que mis estudiantes están logrando esto? Estas acciones serán tus <em>Criterios de Evaluación</em> más
+              adelante.
+            </div>
+          </div>
+
+          <button class="btn-primary" onclick="irASituacion()">
+            💾 Confirmar Referente y Diseñar Situación
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Panel Derecho -->
+    <aside class="panel-tutorial panel-real">
+      <div class="ia-badge">✨ Pensamiento Alternativo</div>
+      <h3>🍎 Voz Docente</h3>
+      <div class="tutorial-content">
+        <span class="badge badge-warning" style="margin-bottom: 16px;">Reflexión Crítica</span>
+
+        <p><strong>El Error Común:</strong> "El estándar es muy alto para mis alumnos, mejor uso uno de primaria."</p>
+
+        <p style="margin-top: 15px;"><strong>El Cambio de Enfoque:</strong> "No bajes el estándar. Mantén la meta alta
+          pero diseña andamios (apoyos) para que lleguen. Si un alumno de 3° está en nivel de primaria, el estándar me
+          sirve para ver exactamente qué le falta fortalecer."</p>
+
+        <div class="alert alert-info" style="margin-top: 24px;">
+          <div class="alert-title">🎯 Meta Docente</div>
+          <div class="alert-message">
+            Usar el estándar como una luz que ilumina las brechas de aprendizaje, no como una pared que excluye
+            estudiantes.
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script src="js/components.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    window.onload = () => {
+      if (typeof updateSteps === 'function') updateSteps(4, 8);
+
+      // Sincronizar el contenido visual con el script app.js
+      cargarEstandarAutomatico();
+      const val = document.getElementById("estandar").value;
+      if (val) {
+        document.getElementById("estandar-container").innerText = val;
+      }
+
+      if (typeof cargarTutorial === 'function') cargarTutorial();
+    };
+  </script>
 </body>
-</html>
 
+</html>

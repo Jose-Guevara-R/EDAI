@@ -1,46 +1,334 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
-  <title>Contexto de Aprendizaje</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paso 2: Contexto y Bienestar - SIED</title>
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/tutorial.css">
+  <link rel="stylesheet" href="css/components.css">
+  <style>
+    /* Ajustes específicos para mejorar visibilidad y expansión */
+    .socioeco-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .choice-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background: var(--theme-card-bg);
+      border: 1px solid var(--theme-border);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .choice-card:hover {
+      border-color: var(--primary-color);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px var(--theme-shadow);
+    }
+
+    body.dark-mode .choice-card {
+      background: rgba(40, 40, 60, 0.6);
+    }
+
+    body.dark-mode .choice-card:hover {
+      background: rgba(50, 50, 80, 0.8);
+      border-color: #a8b9ff;
+    }
+
+    .clima-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px;
+      border-radius: 16px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 12px;
+    }
+
+    .clima-option:hover {
+      transform: translateX(8px);
+    }
+
+    .clima-favorable {
+      background: rgba(79, 172, 254, 0.08);
+    }
+
+    .clima-inestable {
+      background: rgba(250, 112, 154, 0.08);
+    }
+
+    .clima-riesgo {
+      background: rgba(245, 87, 108, 0.08);
+    }
+
+    body.dark-mode .clima-favorable {
+      background: rgba(79, 172, 254, 0.15);
+    }
+
+    body.dark-mode .clima-inestable {
+      background: rgba(250, 112, 154, 0.15);
+    }
+
+    body.dark-mode .clima-riesgo {
+      background: rgba(245, 87, 108, 0.15);
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
 </head>
-<body>
 
-<main class="container">
-  <h2>Paso 2: Contexto y Bienestar</h2>
+<body class="dark-mode"> <!-- Modo oscuro por defecto para wow factor -->
 
-  <div class="card">
-    <h3>Contexto socioeconómico</h3>
-    <label><input type="checkbox" class="socioeco" value="Agricultura"> Agricultura</label>
-    <label><input type="checkbox" class="socioeco" value="Comercio"> Comercio</label>
-    <label><input type="checkbox" class="socioeco" value="Trabajo eventual"> Trabajo eventual</label>
-
-    <h3>Contexto sociocultural</h3>
-    <textarea id="sociocultural" rows="3"></textarea>
-
-    <h3>Clima socioemocional predominante</h3>
-    <label><input type="radio" name="clima" value="Favorable"> Favorable</label>
-    <label><input type="radio" name="clima" value="Inestable"> Inestable</label>
-    <label><input type="radio" name="clima" value="Riesgo"> Riesgo</label>
-
-    <h3>Comprensión lectora (referencial)</h3>
-    <select id="comprension">
-      <option value="">Seleccione</option>
-      <option>Básica</option>
-      <option>Intermedia</option>
-      <option>Limitada</option>
-    </select>
-
-    <button class="btn-primary" onclick="guardarContexto()">
-      Guardar contexto
-    </button>
+  <div class="theme-toggle" onclick="document.body.classList.toggle('dark-mode')">
+    <span class="theme-toggle-icon">🌓</span>
+    <span class="theme-toggle-text">Modo Visual</span>
   </div>
-</main>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="js/app.js"></script>
+  <div class="tutorial-layout">
+    <!-- Panel Izquierdo: Orientación Técnica MINEDU -->
+    <aside class="panel-tutorial panel-tecnico">
+      <h3>🧭 Brújula Técnica</h3>
+      <div class="tutorial-content">
+        <span class="badge badge-primary" style="margin-bottom: 16px;">Paso 2 de 8</span>
 
+        <h4>Caracterizar el Contexto</h4>
+        <p>
+          El contexto comprende las condiciones socioeconómicas, socioculturales, lingüísticas, digitales y
+          socioemocionales. No se puede interpretar el desempeño sin comprender estas condiciones.
+        </p>
+
+        <h4>Factores Críticos 2026:</h4>
+        <ul>
+          <li><strong>Socioeconómicos:</strong> Vulnerabilidad alimentaria, acceso a servicios básicos.</li>
+          <li><strong>Digitales:</strong> Brecha de conectividad y competencias digitales del entorno.</li>
+          <li><strong>Socioemocionales:</strong> Continuidad del bienestar post-confinamiento y clima familiar.</li>
+        </ul>
+
+        <div class="alert alert-info" style="margin-top: 24px;">
+          <div class="alert-message">
+            <strong>💡 Enfoque MINEDU:</strong> "La evaluación diagnóstica empieza mirando afuera para entender lo que
+            pasa adentro del aula."
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Contenido Central: Formulario -->
+    <main class="main-content">
+      <div class="container">
+        <header class="step-header-container">
+          <span class="step-number-badge">Paso 2</span>
+          <h1 class="step-title">Contexto y Bienestar</h1>
+          <p class="step-subtitle">Análisis de las condiciones que influyen en el aprendizaje y regulación
+            socioemocional.</p>
+        </header>
+
+        <div class="card">
+          <!-- Sección: Autoconciencia Emocional -->
+          <div class="alert alert-warning" style="margin-bottom: 32px;">
+            <div class="alert-title">
+              <span>🧘</span>
+              Autoconciencia del Docente
+            </div>
+            <div class="alert-message">
+              <p>Reconoce tus emociones antes de evaluar. El estrés docente se transmite al clima del aula e influye en
+                los resultados.</p>
+              <p style="margin-top: 10px; font-style: italic; opacity: 0.8;">"Un docente regulado genera estudiantes
+                seguros."</p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>🏙️ Contexto Socioeconómico</label>
+            <p style="margin-bottom: 16px; opacity: 0.8;">Actividades predominantes en la zona:</p>
+            <div class="socioeco-grid">
+              <label class="choice-card">
+                <input type="checkbox" class="socioeco" value="Agricultura">
+                <span>🌾 Agricultura</span>
+              </label>
+              <label class="choice-card">
+                <input type="checkbox" class="socioeco" value="Comercio">
+                <span>🏪 Comercio</span>
+              </label>
+              <label class="choice-card">
+                <input type="checkbox" class="socioeco" value="Trabajo eventual">
+                <span>⚙️ Trabajo Eventual</span>
+              </label>
+              <label class="choice-card">
+                <input type="checkbox" class="socioeco" value="Tecnología/Servicios">
+                <span>💻 Tecnología</span>
+              </label>
+              <label class="choice-card" id="label-otra">
+                <input type="checkbox" id="check-otra" onchange="toggleOtraActividad()">
+                <span>➕ Otra...</span>
+              </label>
+            </div>
+
+            <div id="input-otra-container" style="display: none; margin-top: 12px; animation: slideDown 0.3s ease-out;">
+              <input type="text" id="otra-actividad"
+                placeholder="Especifique otra actividad (ej: Minería, Artesanía, etc.)"
+                style="border-style: dashed; border-width: 2px;">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>🌍 Contexto Sociocultural</label>
+            <label for="sociocultural">Tradiciones, idiomas y valores comunitarios:</label>
+            <textarea id="sociocultural"
+              placeholder="Ej: Fiestas patronales que afectan la asistencia, predominancia de lengua originaria, valores de reciprocidad comunitarios..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>💚 Clima Socioemocional del Grupo</label>
+            <p style="margin-bottom: 16px; opacity: 0.8;">¿Cómo percibes el bienestar general?</p>
+
+            <label class="clima-option clima-favorable">
+              <input type="radio" name="clima" value="Favorable">
+              <div>
+                <strong style="color: #4facfe;">✅ Favorable</strong>
+                <p style="font-size: 0.9rem; margin-top: 4px; opacity: 0.8;">Estudiantes motivados, seguros y con buena
+                  disposición.</p>
+              </div>
+            </label>
+
+            <label class="clima-option clima-inestable">
+              <input type="radio" name="clima" value="Inestable">
+              <div>
+                <strong style="color: #fa709a;">⚠️ Inestable</strong>
+                <p style="font-size: 0.9rem; margin-top: 4px; opacity: 0.8;">Altibajos emocionales, resistencia
+                  ocasional o desinterés.</p>
+              </div>
+            </label>
+
+            <label class="clima-option clima-riesgo">
+              <input type="radio" name="clima" value="Riesgo">
+              <div>
+                <strong style="color: #f5576c;">🚨 Riesgo</strong>
+                <p style="font-size: 0.9rem; margin-top: 4px; opacity: 0.8;">Conflictos frecuentes, señales de ansiedad
+                  o retraimiento severo.</p>
+              </div>
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label>📖 Comprensión Lectora (Referencial)</label>
+            <label for="comprension">Nivel general observado:</label>
+            <select id="comprension">
+              <option value="">Seleccione un nivel...</option>
+              <option value="Avanzada">📚 Avanzada - Inferencia profunda y juicio crítico</option>
+              <option value="Intermedia">📖 Intermedia - Comprensión global e inferencias básicas</option>
+              <option value="Básica">📝 Básica - Identificación de datos explícitos (literal)</option>
+              <option value="Limitada">⚠️ Limitada - Dificultad para decodificar o seguir secuencias</option>
+            </select>
+          </div>
+
+          <button class="btn-primary" id="btnGuardar" onclick="guardarContexto()">
+            💾 Guardar y Definir Competencias
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Panel Derecho: Ejemplo Práctico -->
+    <aside class="panel-tutorial panel-real">
+      <div class="ia-badge">✨ Voz de la Experiencia</div>
+      <h3>🍎 Ejemplo Real</h3>
+      <div class="tutorial-content">
+        <span class="badge badge-warning" style="margin-bottom: 16px;">Caso Secundaria</span>
+
+        <p><strong>Situación:</strong> 2° de Secundaria en zona periférica.</p>
+        <p><strong>Contexto:</strong> El 40% de estudiantes trabaja en el mercado local por las mañanas. El clima
+          familiar es tenso debido a la inestabilidad económica.</p>
+
+        <p style="margin-top: 15px;"><strong>Consecuencia Pedagógica:</strong> El docente nota que los retos de
+          Matemática que involucran "compras" son más fáciles para ellos que los de geometría abstracta.</p>
+
+        <div class="alert alert-info" style="margin-top: 24px;">
+          <div class="alert-title">🎯 Decisión Docente</div>
+          <div class="alert-message">
+            "Para mi evaluación de Comunicación, elegiré lecturas sobre emprendimiento juvenil. Esto conecta con su
+            realidad y baja su resistencia a la lectura."
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script src="js/components.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    window.onload = () => {
+      // Actualizar indicador de pasos
+      if (typeof updateSteps === 'function') updateSteps(2, 8);
+
+      // Cargar tutorial personalizado por IA
+      if (typeof cargarTutorial === 'function') cargarTutorial();
+
+      // Efectos visuales en selecciones
+      document.querySelectorAll('.clima-option, .choice-card').forEach(card => {
+        card.addEventListener('click', function (e) {
+          // Si el clic no fue directamente en el checkbox, lo activamos manualmente
+          if (e.target.tagName !== 'INPUT') {
+            const check = this.querySelector('input');
+            if (check) {
+              check.checked = !check.checked;
+              // Disparamos el evento change manualmente para que se ejecute toggleOtraActividad
+              const event = new Event('change', { bubbles: true });
+              check.dispatchEvent(event);
+            }
+          }
+
+          const check = this.querySelector('input');
+          if (check && check.type === 'radio') {
+            document.querySelectorAll(`input[name="${check.name}"]`).forEach(input => {
+              input.closest('.clima-option').style.borderColor = 'transparent';
+              input.closest('.clima-option').style.boxShadow = 'none';
+            });
+            this.style.borderColor = 'var(--primary-color)';
+            this.style.boxShadow = '0 0 0 4px rgba(102, 126, 234, 0.15)';
+          }
+        });
+      });
+    };
+
+    function toggleOtraActividad() {
+      const check = document.getElementById('check-otra');
+      const container = document.getElementById('input-otra-container');
+      const input = document.getElementById('otra-actividad');
+
+      if (check.checked) {
+        container.style.display = 'block';
+        input.focus();
+        document.getElementById('label-otra').style.borderColor = 'var(--primary-color)';
+        document.getElementById('label-otra').style.background = 'rgba(102, 126, 234, 0.1)';
+      } else {
+        container.style.display = 'none';
+        document.getElementById('label-otra').style.borderColor = 'var(--theme-border)';
+        document.getElementById('label-otra').style.background = 'var(--theme-card-bg)';
+      }
+    }
+  </script>
 </body>
-</html>
 
+</html>

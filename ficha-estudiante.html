@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paso 7: Ficha de Evaluación - SIED</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/tutorial.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        /* Estilos específicos para la vista previa de la ficha en el editor */
+        .ficha-preview-container {
+            background: #f1f5f9;
+            padding: 40px;
+            border-radius: 24px;
+            margin-top: 20px;
+            max-height: 800px;
+            overflow-y: auto;
+            border: 2px solid var(--theme-border);
+        }
+
+        .hoja-examen {
+            background: white !important;
+            color: #1a202c !important;
+            width: 100%;
+            /* FIX: Reducir ancho máximo para crear márgenes naturales al centrar */
+            max-width: 18cm;
+            min-height: 29.7cm;
+            margin: 0 auto;
+            /* Auto margin para centrar horizontalmente */
+            padding: 2cm;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            font-family: 'Arial', sans-serif;
+            box-sizing: border-box;
+            position: relative;
+            display: block !important;
+        }
+
+        .hoja-examen * {
+            color: #1a202c !important;
+        }
+
+        .examen-header {
+            text-align: center;
+            border-bottom: 2px solid #1f3c88;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .datos-alumno {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+        }
+
+        .datos-alumno div {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+        }
+
+        .pregunta-card {
+            margin-bottom: 30px;
+            page-break-inside: avoid;
+        }
+
+        .pregunta-titulo {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: #1f3c88 !important;
+        }
+
+        .pregunta-texto {
+            margin-bottom: 20px;
+            font-size: 1rem;
+            line-height: 1.6;
+            text-align: justify;
+        }
+
+        .espacio-respuesta-lineas {
+            border-bottom: 1.5pt solid #334155;
+            height: 35px;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        .btn-floating-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        /* Ocultar elementos de la interfaz en modo papel para la exportación */
+        .paper-mode .btn-floating-actions,
+        .paper-mode .theme-toggle {
+            display: none !important;
+        }
+
+        /* Ajustes específicos para cuando se convierte a PDF */
+        .paper-mode {
+            padding: 1.5cm !important;
+            margin: 0 !important;
+            box-shadow: none !important;
+            min-height: auto !important;
+        }
+    </style>
+</head>
+
+<body class="dark-mode" onload="initFicha()">
+
+    <div class="theme-toggle" onclick="document.body.classList.toggle('dark-mode')">
+        <span class="theme-toggle-icon">🌓</span>
+        <span class="theme-toggle-text">Modo Visual</span>
+    </div>
+
+    <div class="tutorial-layout">
+        <!-- Panel Izquierdo: Brújula Técnica -->
+        <aside class="panel-tutorial panel-tecnico">
+            <h3>🧭 Brújula Técnica</h3>
+            <div class="tutorial-content">
+                <span class="badge badge-primary" style="margin-bottom: 16px;">Paso 7 de 8</span>
+
+                <h4>Diseño de Actividades</h4>
+                <p>En este paso transformamos las evidencias en preguntas o retos concretos para el estudiante. La
+                    ficha es el instrumento que el alumno tendrá en sus manos.</p>
+
+                <div class="alert alert-info" style="margin-top: 24px;">
+                    <div class="alert-message">
+                        <strong>✅ Enfoque MINEDU:</strong>
+                        <ul style="margin-top: 10px; padding-left: 15px;">
+                            <li><strong>Desempeño Real:</strong> No preguntes "¿Qué es?", pide que lo usen para
+                                resolver.</li>
+                            <li><strong>Contextualización:</strong> El reto debe nacer de la situación significativa.
+                            </li>
+                            <li><strong>Inclusividad:</strong> Asegura que el lenguaje sea accesible para todos.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="alert alert-warning" style="margin-top: 20px;">
+                    <div class="alert-message">
+                        <strong>💡 Tip SIED:</strong> Una buena ficha diagnóstica explora qué sabe hacer el alumno ante
+                        un problema nuevo, no cuánto recuerda del año anterior.
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Contenido Central: Editor de Ficha -->
+        <main class="main-content">
+            <div class="container">
+                <header class="step-header-container">
+                    <span class="step-number-badge">Paso 7</span>
+                    <h1 class="step-title">Ficha del Estudiante</h1>
+                    <p class="step-subtitle">Diseña los retos y preguntas que permitirán recoger la evidencia de
+                        aprendizaje.</p>
+                </header>
+
+                <div class="card">
+                    <div class="alert alert-success" style="margin-bottom: 20px;">
+                        <div class="alert-message">
+                            ✨ <strong>¡Inteligencia Artificial lista!</strong> He generado estas actividades basadas en
+                            tus evidencias. Puedes editarlas directamente en la hoja.
+                        </div>
+                    </div>
+
+                    <div class="ficha-preview-container">
+                        <div class="hoja-examen paper-mode" id="areaExamen">
+                            <div class="examen-header">
+                                <h2 id="nomInst" style="text-transform: uppercase; margin:0; font-size: 1.4rem;">NOMBRE
+                                    DE LA INSTITUCIÓN</h2>
+                                <p style="margin:5px 0; font-weight: bold;">EVALUACIÓN DIAGNÓSTICA 2026</p>
+                                <h3 id="areaCurso" style="margin:5px 0; font-size: 1.2rem; color: #1f3c88;">ÁREA: ...
+                                </h3>
+                            </div>
+
+                            <div class="datos-alumno">
+                                <div><strong>Estudiante:</strong></div>
+                                <div><strong>Grado:</strong> <span id="txtGrado"></span></div>
+                                <div><strong>Fecha:</strong> ____/____/2026</div>
+                            </div>
+
+                            <div id="contenedorPreguntas" contenteditable="true">
+                                <!-- Aquí la IA inyectará las preguntas -->
+                                <p style="text-align:center; color:#666;">🤖 Generando actividades diagnósticas...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="btn-floating-actions">
+                        <button class="btn-secondary" onclick="window.location.href='evidencias.html'" style="flex: 1;">
+                            ⬅ Volver
+                        </button>
+                        <button class="btn-secondary" onclick="generarContenidoExamen()"
+                            style="flex: 1; border: 1px dashed var(--primary-color);">
+                            🪄 Regenerar con IA
+                        </button>
+                        <button class="btn-secondary" onclick="exportarFichaWord()"
+                            style="flex: 1; background: #2b5797; color: white;">
+                            📥 Descargar Word
+                        </button>
+                        <button class="btn-primary" onclick="irAProcesarCriterios()"
+                            style="flex: 2; background: var(--accent-gradient);">
+                            Siguiente: Criterios y Rúbrica ➡
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Panel Derecho: Ejemplo Real -->
+        <aside class="panel-tutorial panel-real">
+            <div class="ia-badge">✨ Voz Docente</div>
+            <h3>🍎 Ejemplo Real</h3>
+            <div class="tutorial-content">
+                <span class="badge badge-warning" style="margin-bottom: 16px;">Caso: Comunicación</span>
+
+                <p><strong>Evidencia:</strong> Escribir una carta de opinión.</p>
+                <p><strong>Actividad en Ficha:</strong> "Lee el siguiente caso sobre el uso del plástico en tu
+                    comunidad. Luego, escribe una carta al alcalde expresando tu postura y proponiendo dos soluciones
+                    viables."</p>
+
+                <div class="alert alert-info" style="margin-top: 24px;">
+                    <div class="alert-title">🎯 Potencial del Reto</div>
+                    <div class="alert-message">
+                        No le pedimos "qué es una carta", le pedimos que "escriba una" para resolver un problema real.
+                        Eso es evaluar competencias.
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        function initFicha() {
+            if (typeof updateSteps === 'function') updateSteps(7, 8);
+            generarContenidoExamen(); // Función definida en app.js
+            if (typeof cargarTutorial === 'function') cargarTutorial();
+        }
+
+        async function irAProcesarCriterios() {
+            showLoading("Procesando actividades y preparando matriz de evaluación...");
+
+            // Guardar el contenido editado de la ficha
+            const contenedor = document.getElementById("contenedorPreguntas");
+            const ev = obtenerEvaluacion();
+            ev.contenidoFichaHtml = contenedor.innerHTML;
+            guardarEvaluacion(ev);
+
+            setTimeout(async () => {
+                // Generar el instrumento basado en las actividades reales
+                await generarInstrumentoDiagnostico();
+                window.location.href = 'instrumento.html';
+            }, 1500);
+        }
+
+        function exportarFichaWord() {
+            const ev = obtenerEvaluacion();
+            if (!ev) return;
+
+            // Capturar contenido editable (Título y Preguntas)
+            const tituloExamen = document.querySelector(".examen-header h2")?.innerText || "Evaluación Diagnóstica";
+            const subTitulo = document.querySelector(".examen-header p")?.innerText || "";
+
+            // Capturar el contenido del contenedor de preguntas (respetando lo que la IA generó)
+            const contenidoCuerpo = document.getElementById("contenedorPreguntas").innerHTML;
+
+            const content = `
+                <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+                <head><meta charset='utf-8'>
+                <style>
+                    body { font-family: 'Arial', sans-serif; line-height: 1.5; }
+                    .header { text-align: center; margin-bottom: 20pt; border-bottom: 2pt solid #1f3c88; padding-bottom: 10pt; }
+                    h1 { font-size: 16pt; text-transform: uppercase; color: #000; margin: 0; }
+                    h2 { font-size: 14pt; color: #333; margin: 5pt 0; }
+                    .datos-table { width: 100%; border-collapse: collapse; margin-bottom: 20pt; font-size: 11pt; }
+                    .datos-table td { padding: 5pt; border-bottom: 1pt solid #ccc; }
+                    .pregunta-card { margin-bottom: 20pt; }
+                    .pregunta-titulo { font-weight: bold; font-size: 12pt; color: #1f3c88; margin-bottom: 5pt; }
+                    .pregunta-texto { text-align: justify; font-size: 11pt; margin-bottom: 10pt; }
+                    .espacio-respuesta-lineas { border-bottom: 1pt solid #000; height: 20pt; margin-bottom: 10pt; }
+                    /* Estilos para el texto estímulo */
+                    .estimulo-lectura { background: #f0f0f0; padding: 15pt; border: 1pt solid #ccc; margin-bottom: 15pt; } 
+                </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>${ev.institucion || "INSTITUCIÓN EDUCATIVA"}</h1>
+                        <h2>${subTitulo}</h2>
+                        <p style="font-weight:bold; color: #1f3c88;">ÁREA: ${ev.area || "..."}</p>
+                    </div>
+
+                    <table class="datos-table">
+                        <tr>
+                            <td><strong>Estudiante:</strong> __________________________________________</td>
+                            <td><strong>Grado:</strong> ${ev.grado} (${ev.ciclo})</td>
+                            <td><strong>Fecha:</strong> ____/____/2026</td>
+                        </tr>
+                    </table>
+
+                    <!-- Inyectar contenido generado por IA -->
+                    <div class="cuerpo-examen">
+                        ${contenidoCuerpo}
+                    </div>
+                </body>
+                </html>
+            `;
+
+            const blob = new Blob(['\ufeff', content], {
+                type: 'application/msword'
+            });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `Ficha_Diagnostica_${ev.area || 'General'}.doc`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+
+</html>

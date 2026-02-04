@@ -13,16 +13,26 @@ export default async function handler(req, res) {
     const { evaluacion_id, evidencias_texto } = req.body;
     // evidencias_texto: array de strings que son los ítems finales
 
+    let evidenciasArray = [];
+    if (Array.isArray(evidencias_texto)) {
+        evidenciasArray = evidencias_texto;
+    } else if (typeof evidencias_texto === 'string') {
+        // Si llega como string, lo dividimos por saltos de línea
+        evidenciasArray = evidencias_texto.split('\n');
+    }
+
+    // Filtramos vacíos
+    evidenciasArray = evidenciasArray.map(t => t.trim()).filter(t => t.length > 0);
+
     try {
         // 1. Obtener datos básicos
         const evalData = await query('SELECT numero_estudiantes FROM evaluaciones WHERE id = $1', [evaluacion_id]);
         if (evalData.rows.length === 0) return res.status(404).json({ error: "Evaluación no encontrada" });
 
-        // 2. Insertar los ítems como "indicadores finales" si aún no existen
-        // (Limpiamos los previos 'tipo_evidencia=item_final' para evitar duplicados si regeneran)
+        // 2. Insertar los ítems
         await query(`DELETE FROM indicadores_evaluacion WHERE evaluacion_id = $1 AND tipo_evidencia = 'item_final'`, [evaluacion_id]);
 
-        for (const texto of evidencias_texto) {
+        for (const texto of evidenciasArray) {
             await query(`
           INSERT INTO indicadores_evaluacion 
           (evaluacion_id, competencia, descripcion_indicador, tipo_evidencia)
@@ -33,7 +43,7 @@ export default async function handler(req, res) {
         // 3. Confirmar éxito (El frontend usará esto para habilitar el módulo de notas en el futuro)
         return res.status(200).json({
             mensaje: "Instrumento sincronizado",
-            items_registrados: evidencias_texto.length
+            items_registrados: evidenciasArray.length
         });
 
     } catch (error) {

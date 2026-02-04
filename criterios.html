@@ -1,34 +1,136 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
-  <title>Paso 7 – Criterios</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paso 7: Criterios de Evaluación - SIED</title>
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/tutorial.css">
+  <link rel="stylesheet" href="css/components.css">
 </head>
-<body>
 
-<main class="container">
-  <h2>Paso 7: Criterios de Evaluación</h2>
+<body class="dark-mode">
 
-  <div class="card">
-    <p>
-      Los criterios permiten valorar el desempeño del estudiante en
-      relación con el estándar del ciclo.
-    </p>
-
-    <label>Criterios de evaluación</label>
-    <textarea id="criterios" rows="6"
-      placeholder="Ejemplo: Identifica, interpreta y argumenta con coherencia..."></textarea>
-
-    <button class="btn-primary" onclick="irAInstrumento()">
-      Siguiente
-    </button>
+  <div class="theme-toggle" onclick="document.body.classList.toggle('dark-mode')">
+    <span class="theme-toggle-icon">🌓</span>
+    <span class="theme-toggle-text">Modo Visual</span>
   </div>
-</main>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="js/app.js"></script>
+  <div class="tutorial-layout">
+    <!-- Panel Izquierdo: Orientación Técnica -->
+    <aside class="panel-tutorial panel-tecnico">
+      <h3>🧭 Brújula Técnica</h3>
+      <div class="tutorial-content">
+        <span class="badge badge-primary" style="margin-bottom: 16px;">Paso 7 de 8</span>
 
+        <h4>Criterios de Evaluación</h4>
+        <p>Los criterios son el referente específico para el juicio de valor sobre el nivel de desarrollo de las
+          competencias. Describen las cualidades de aquello que se quiere valorar y que los estudiantes deben demostrar
+          en sus producciones o actuaciones.</p>
+
+        <div class="alert alert-info" style="margin-top: 24px;">
+          <div class="alert-message">
+            <strong>💡 ¿Cómo redactarlos?</strong><br>
+            Toma como base el Estándar (Paso 4) y la Situación (Paso 5). Deben ser claros, objetivos y comprensibles
+            para los estudiantes.
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Contenido Central: Formulario -->
+    <main class="main-content">
+      <div class="container">
+        <header class="step-header-container">
+          <span class="step-number-badge">Paso 7</span>
+          <h1 class="step-title">Criterios de Evaluación</h1>
+          <p class="step-subtitle">Define las cualidades y desempeños que observarás en las evidencias recogidas.</p>
+        </header>
+
+        <div class="card">
+          <div class="alert alert-warning" style="margin-bottom: 32px;">
+            <div class="alert-title">
+              <span>📋</span>
+              Rigor Técnico
+            </div>
+            <div class="alert-message">
+              Los criterios permiten valorar el desempeño del estudiante en relación con el estándar del ciclo.
+              Asegúrate de que sean coherentes con el reto planteado.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 8px;">
+              <label for="criterios" style="margin-bottom: 0;">Criterios de evaluación seleccionados:</label>
+              <button class="btn-secondary" onclick="generarCriteriosIA()"
+                style="padding: 4px 12px; font-size: 0.8rem; border-radius: 8px;">
+                ✨ Sugerir con IA
+              </button>
+            </div>
+            <textarea id="criterios" rows="8"
+              placeholder="Ejemplo: Identifica información en el texto, interpreta el propósito del autor y argumenta su posición con coherencia..."></textarea>
+          </div>
+
+          <button class="btn-primary" onclick="irAProcesarInstrumentoDesdeCriterios()">
+            💾 Guardar y Generar Instrumento Final
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Panel Derecho: Ejemplo Práctico -->
+    <aside class="panel-tutorial panel-real">
+      <div class="ia-badge">✨ Voz de la Experiencia</div>
+      <h3>🍎 Ejemplo Real</h3>
+      <div class="tutorial-content">
+        <span class="badge badge-warning" style="margin-bottom: 16px;">Caso: Matemática</span>
+
+        <p><strong>Competencia:</strong> Resuelve problemas de cantidad.</p>
+        <p><strong>Criterio:</strong> "Utiliza diversas estrategias para calcular el presupuesto familiar y justifica su
+          elección basándose en el ahorro mensual."</p>
+
+        <div class="alert alert-info" style="margin-top: 24px;">
+          <div class="alert-title">🎯 Meta del Criterio</div>
+          <div class="alert-message">
+            El criterio no solo dice "calcula bien", sino que pide "justificar". Ahí es donde observamos la profundidad
+            de la competencia.
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    window.onload = () => {
+      if (typeof updateSteps === 'function') updateSteps(7, 8);
+      // Cargar hallazgos previos si existen
+      const ev = obtenerEvaluacion();
+      if (ev && ev.criterios) {
+        document.getElementById("criterios").value = ev.criterios;
+      }
+      if (typeof cargarTutorial === 'function') cargarTutorial();
+    };
+
+    async function irAProcesarInstrumentoDesdeCriterios() {
+      const crit = document.getElementById("criterios").value;
+      if (!crit.trim()) {
+        alert("Por favor, ingresa los criterios de evaluación.");
+        return;
+      }
+
+      const ev = obtenerEvaluacion();
+      ev.criterios = crit;
+      guardarEvaluacion(ev);
+
+      // Usamos el nuevo sistema de IA para la rúbrica (asíncrono)
+      await generarInstrumentoDiagnostico();
+      window.location.href = 'instrumento.html';
+    }
+  </script>
 </body>
-</html>
 
+</html>

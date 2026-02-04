@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis y Conclusiones - SIED 2026</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/tutorial.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        /* CONFIGURACIÓN BASE (Fondo Blanco - Para Impresión y Exportación) */
+        /* TIPOGRAFÍA PREMIUM */
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&family=Inter:wght@400;600&display=swap');
+
+        :root {
+            --p-color: #1e3a8a;
+            /* Azul formal */
+            --bg-web: #f1f5f9;
+            --txt-dark: #0f172a;
+        }
+
+        body {
+            background: #ffffff;
+            color: #000000;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+        }
+
+        /* DISEÑO DE PANTALLA (WEB VIEW) */
+        body.web-view {
+            background: var(--bg-web);
+        }
+
+        body.web-view.dark-mode {
+            background: #0f172a;
+        }
+
+        /* CONTENEDOR HOJA A4 PREMIUM (Como la ficha) */
+        .report-container {
+            background: white !important;
+            width: 210mm;
+            min-height: 297mm;
+            margin: 30px auto;
+            padding: 25mm 20mm;
+            /* Márgenes oficiales */
+            box-sizing: border-box;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            color: black !important;
+            position: relative;
+        }
+
+        /* TÍTULOS DE ALTO CONTRASTE (MÉTODO FICHA) */
+        .header-report h1 {
+            font-family: 'Outfit', sans-serif !important;
+            font-size: 2.5rem !important;
+            font-weight: 900 !important;
+            color: #000000 !important;
+            -webkit-text-fill-color: #000000 !important;
+            margin: 10px 0 !important;
+            padding: 0 !important;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+            display: block !important;
+            background: none !important;
+            opacity: 1 !important;
+        }
+
+        .header-report p {
+            color: #000000 !important;
+            font-weight: 700 !important;
+            opacity: 1 !important;
+        }
+
+        /* EVITAR CORTES DE PALABRAS Y PÁRRAFOS PRÉMIUM */
+        p,
+        h1,
+        h2,
+        h3,
+        .meta-card,
+        .conclusions-box,
+        .chart-container,
+        .bar-group,
+        li,
+        td,
+        th,
+        tr {
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+            orphans: 3;
+            widows: 3;
+        }
+
+        /* Estilos de Tabla de la IA con más margen (Padding) */
+        .ia-report-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            border: 1.5px solid #000;
+        }
+
+        .ia-report-content th,
+        .ia-report-content td {
+            padding: 18px !important;
+            /* Más margen interno para que respire el texto */
+            border: 1px solid #000;
+            text-align: left;
+            vertical-align: top;
+            line-height: 1.6;
+        }
+
+        .ia-report-content th {
+            background: #f8fafc;
+        }
+
+        .ia-report-content p {
+            margin-bottom: 18px;
+            line-height: 1.6;
+            text-align: justify;
+        }
+
+        .ia-report-content h3 {
+            font-family: 'Outfit', sans-serif;
+            color: #000 !important;
+            margin-top: 25px;
+            border-bottom: 1.5px solid #000;
+            padding-bottom: 5px;
+            font-size: 1.2rem;
+        }
+
+        .ia-report-content strong {
+            color: #000 !important;
+            font-weight: 700;
+        }
+
+        .header-report {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid var(--p-color);
+            padding-bottom: 20px;
+        }
+
+        /* DISEÑO DE CARDS DE METADATOS */
+        .metadata-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .meta-card {
+            border: 1px solid #000;
+            padding: 10px 15px;
+            background: #fff;
+        }
+
+        .meta-label {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #333;
+            text-transform: uppercase;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .meta-value {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #000 !important;
+        }
+
+        /* CONTENEDORES DE CONTENIDO */
+        .conclusions-box,
+        .chart-container {
+            border: 1px solid #e2e8f0;
+            padding: 25px;
+            margin-bottom: 25px;
+            background: #fff;
+        }
+
+        /* Estilos en pantalla dark mode para que el papel no brille tanto en el editor */
+        body.dark-mode .conclusions-box,
+        body.dark-mode .chart-container {
+            border-color: #eee;
+        }
+
+        .conclusions-box h3,
+        .chart-container h3 {
+            font-family: 'Outfit', sans-serif;
+            color: #000 !important;
+            border-bottom: 2px solid var(--p-color);
+            padding-bottom: 8px;
+            margin-top: 0;
+            font-size: 1.3rem;
+            text-transform: uppercase;
+        }
+
+        /* BARRAS DE PROGRESO */
+        .bar-group {
+            margin-bottom: 20px;
+        }
+
+        .bar-label {
+            font-weight: 700;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+        }
+
+        .bar-bg {
+            height: 16px;
+            background: #f1f5f9;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px dotted #ccc;
+            display: flex;
+        }
+
+        .bar-fill {
+            height: 100%;
+        }
+
+        /* Colores oficiales serios */
+        .fill-inicio {
+            background: #ef4444 !important;
+        }
+
+        .fill-proceso {
+            background: #f59e0b !important;
+        }
+
+        .fill-logro {
+            background: #10b981 !important;
+        }
+
+        .fill-destacado {
+            background: #3b82f6 !important;
+        }
+
+        .actions-footer {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 50px 0;
+        }
+
+        /* Solo negro puro en exportación */
+        body.exporting .header-report h1,
+        body.exporting .header-report .badge-primary,
+        body.exporting .meta-value,
+        body.exporting .conclusions-box,
+        body.exporting h3,
+        body.exporting p,
+        body.exporting span,
+        body.exporting td,
+        body.exporting th,
+        body.exporting strong {
+            color: #000000 !important;
+            -webkit-text-fill-color: #000000 !important;
+            font-weight: 700;
+        }
+
+        /* OCULTAR BOTONES EN EXPORTACIÓN */
+        body.exporting .actions-footer,
+        body.exporting button,
+        body.exporting .badge-primary {
+            display: none !important;
+            visibility: hidden !important;
+        }
+
+        body.exporting .report-container {
+            margin: 0 !important;
+            box-shadow: none !important;
+            width: 210mm !important;
+            padding: 20mm 5mm 20mm 80mm !important;
+            /* Margen oficial: 30mm Izquierda / 20mm Derecha */
+            border: none !important;
+            background: white !important;
+            transform: none !important;
+        }
+
+        /* ESPACIO DE MARGEN PARA PDF CENTRADO */
+        @page {
+            size: A4;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body class="dark-mode">
+
+    <div class="report-container">
+        <div class="header-report">
+            <span class="badge badge-primary">Informe Pedagógico IA</span>
+            <h1>Diagnóstico de Aprendizajes 2026</h1>
+            <p id="txtFecha" style="opacity: 0.7;">Generando reporte detallado...</p>
+        </div>
+
+        <!-- Metadatos de la evaluación -->
+        <div class="metadata-grid">
+            <div class="meta-card">
+                <div class="meta-label">Institución</div>
+                <div class="meta-value" id="resInstitucion">-</div>
+            </div>
+            <div class="meta-card">
+                <div class="meta-label">Área Curricular</div>
+                <div class="meta-value" id="resArea">-</div>
+            </div>
+            <div class="meta-card">
+                <div class="meta-label">Grado y Sección</div>
+                <div class="meta-value" id="resGrado">-</div>
+            </div>
+            <div class="meta-card">
+                <div class="meta-label">Ciclo</div>
+                <div class="meta-value" id="resCiclo">-</div>
+            </div>
+        </div>
+
+        <!-- Resultados Cuantitativos y Conclusiones -->
+        <div class="stats-section">
+            <div class="chart-container">
+                <h3>📊 Resumen de Niveles de Logro</h3>
+                <p style="font-size: 0.9rem; opacity: 0.7; margin-bottom: 25px;">Distribución porcentual por indicador
+                    evaluado.</p>
+
+                <div id="contenedorGraficos">
+                    <!-- Se llenará dinámicamente -->
+                </div>
+            </div>
+
+            <div class="conclusions-box" id="cajaConclusiones">
+                <h3 style="margin-top:0;">📋 Análisis de Planificación Curricular (IA)</h3>
+                <div id="loaderIA" class="loading-ia">
+                    <p class="pulse">Analizando brechas y proyectando unidades...</p>
+                    <div class="spinner" style="margin: 20px auto;"></div>
+                </div>
+                <div id="textoConclusiones" style="display: none;">
+                    <!-- Se llenará con el informe enriquecido -->
+                </div>
+            </div>
+        </div>
+
+        <div class="actions-footer">
+            <button class="btn-secondary" onclick="window.history.back()">
+                ← Volver
+            </button>
+            <button class="btn-primary" onclick="descargarInforme()" style="background: #1a365d;">
+                📥 Descargar PDF
+            </button>
+            <button class="btn-primary" onclick="descargarWord()" style="background: #2b5797;">
+                📝 Exportar a Word
+            </button>
+            <button class="btn-secondary" onclick="window.location.href='dashboard.html'">
+                🏠 Inicio
+            </button>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <!-- Incluimos html2pdf para la exportación -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            // Ponemos web-view por defecto para que los estilos web funcionen
+            document.body.classList.add('web-view');
+
+            const idEvaluacion = localStorage.getItem("evaluacion_id_actual");
+            if (!idEvaluacion) {
+                alert("No hay una evaluación activa seleccionada.");
+                window.location.href = "dashboard.html";
+                return;
+            }
+
+            // 1. Cargar metadatos
+            const ev = obtenerEvaluacion();
+            if (ev) {
+                document.getElementById("resInstitucion").textContent = ev.institucion || "-";
+                document.getElementById("resArea").textContent = ev.area || "-";
+                document.getElementById("resGrado").textContent = ev.grado || "-";
+                document.getElementById("resCiclo").textContent = ev.ciclo || "-";
+                document.getElementById("txtFecha").textContent = `Reporte generado el ${new Date().toLocaleDateString()}`;
+            }
+
+            // 2. Llamar a la API
+            try {
+                const res = await fetch('/api/ia-informe', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ evaluacion_id: idEvaluacion })
+                });
+
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || "Error al generar informe");
+
+                // 3. Renderizar Gráficos
+                const contenedorGraficos = document.getElementById("contenedorGraficos");
+                if (data.estadisticas && data.estadisticas.length > 0) {
+                    let htmlGraficos = "";
+                    data.estadisticas.forEach(stat => {
+                        const percInicio = Math.round((stat.inicio / stat.total) * 100) || 0;
+                        const percProceso = Math.round((stat.proceso / stat.total) * 100) || 0;
+                        const percLogro = Math.round((stat.logro / stat.total) * 100) || 0;
+                        const percDestacado = Math.round((stat.destacado / stat.total) * 100) || 0;
+
+                        htmlGraficos += `
+              <div class="bar-group">
+                <div class="bar-label">
+                  <span>${stat.indicador}</span>
+                </div>
+                <div style="font-size:0.8rem; margin-bottom:4px; color:#666;">
+                   Inicio: ${percInicio}% | Proceso: ${percProceso}% | Logro: ${percLogro}%
+                </div>
+                <div class="bar-bg">
+                    <div class="bar-fill fill-inicio" style="width: ${percInicio}%"></div>
+                    <div class="bar-fill fill-proceso" style="width: ${percProceso}%"></div>
+                    <div class="bar-fill fill-logro" style="width: ${percLogro}%"></div>
+                </div>
+              </div>
+            `;
+                    });
+                    contenedorGraficos.innerHTML = htmlGraficos;
+                }
+
+                // 4. Mostrar Informe Enriquecido
+                document.getElementById("loaderIA").style.display = "none";
+                const txtIA = document.getElementById("textoConclusiones");
+                txtIA.style.display = "block";
+
+                // La IA ahora devuelve HTML puro con tablas, lo inyectamos directamente
+                txtIA.innerHTML = `<div class="ia-report-content" style="text-align:justify; font-size:1rem;">${data.conclusiones}</div>`;
+
+            } catch (err) {
+                console.error(err);
+                document.getElementById("loaderIA").innerHTML = `<p style="color:red;">Error: ${err.message}</p>`;
+            }
+        });
+
+        function descargarInforme() {
+            window.scrollTo(0, 0);
+            document.body.classList.add('exporting');
+
+            const elemento = document.querySelector('.report-container');
+            const area = document.getElementById('resArea').textContent.trim() || 'General';
+
+            const opt = {
+                margin: [10, 0, 10, 0], // Margen arriba/abajo para cortes de página
+                filename: `Informe_Pedagogico_${area.replace(/ /g, '_')}_2026.pdf`,
+                image: { type: 'jpeg', quality: 1 },
+                html2canvas: {
+                    scale: 3,
+                    useCORS: true,
+                    letterRendering: true,
+                    scrollY: 0,
+                    windowWidth: 1060 // Ajuste preciso para que el contenedor llene la hoja A4
+                },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+            };
+
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = "Generando...";
+            btn.disabled = true;
+
+            setTimeout(() => {
+                html2pdf().set(opt).from(elemento).save().then(() => {
+                    btn.textContent = originalText;
+                    btn.disabled = false;
+                    document.body.classList.remove('exporting');
+                }).catch(err => {
+                    btn.disabled = false;
+                    btn.textContent = "Error";
+                    document.body.classList.remove('exporting');
+                });
+            }, 500);
+        }
+
+        // EXPORTACIÓN PROFESIONAL A WORD CON TABLAS Y COLORES
+        function descargarWord() {
+            const area = document.getElementById('resArea').textContent || 'General';
+            const grado = document.getElementById('resGrado').textContent || '-';
+            const inst = document.getElementById('resInstitucion').textContent || '-';
+            const ciclo = document.getElementById('resCiclo').textContent || '-';
+            const fecha = new Date().toLocaleDateString();
+
+            // Capturar estadísticas para la tabla de Word
+            let statsHtml = "";
+            const grupos = document.querySelectorAll('.bar-group');
+            grupos.forEach(g => {
+                const indicador = g.querySelector('.bar-label span').textContent;
+                const txtPerc = g.querySelector('div[style*="font-size:0.8rem"]').textContent;
+
+                // Extraer porcentajes
+                const match = txtPerc.match(/(\d+)%/g);
+                const pIn = match[0] || "0%";
+                const pPr = match[1] || "0%";
+                const pLo = match[2] || "0%";
+
+                statsHtml += `
+                    <tr>
+                        <td style="border: 0.5pt solid #000; padding: 7pt; width: 45%; font-size: 10.5pt; background-color: #f9fafb;"><b>${indicador}</b></td>
+                        <td style="border: 0.5pt solid #000; padding: 7pt; text-align: center; color: #cc0000; font-weight: bold; font-size: 10pt;">${pIn} Inicio</td>
+                        <td style="border: 0.5pt solid #000; padding: 7pt; text-align: center; color: #b45309; font-weight: bold; font-size: 10pt;">${pPr} Proceso</td>
+                        <td style="border: 0.5pt solid #000; padding: 7pt; text-align: center; color: #059669; font-weight: bold; font-size: 10pt;">${pLo} Logro</td>
+                    </tr>
+                `;
+            });
+
+            let wordHtml = `
+                <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+                <head><meta charset='utf-8'><style>
+                    body { font-family: 'Segoe UI', Arial, sans-serif; }
+                    .header { text-align: center; margin-bottom: 25pt; border-bottom: 2pt solid #1e3a8a; padding-bottom: 10pt; }
+                    h1 { font-size: 20pt; color: #000; font-weight: bold; text-transform: uppercase; margin: 0; }
+                    .meta-table { width: 100%; border-collapse: collapse; margin: 15pt 0; border: 1pt solid #ccc; }
+                    .meta-table td { padding: 10pt; background: #ffffff; border: 0.5pt solid #eee; }
+                    .label { font-size: 7.5pt; font-weight: bold; color: #1e3a8a; text-transform: uppercase; margin-bottom: 2pt; }
+                    .value { font-size: 11pt; font-weight: bold; color: #000; }
+                    .section-title { font-size: 13pt; font-weight: bold; color: #1e3a8a; background: #f1f5f9; padding: 6pt; margin-top: 25pt; border-left: 4pt solid #1e3a8a; text-transform: uppercase; }
+                    table.stats-table { width: 100%; border-collapse: collapse; margin-top: 10pt; }
+                    .conclusiones-txt { font-size: 11pt; line-height: 1.6; text-align: justify; margin-top: 15pt; }
+                    table.ia-table { width: 100%; border-collapse: collapse; margin: 15pt 0; border: 1pt solid #000; }
+                    table.ia-table td, table.ia-table th { border: 0.5pt solid #000; padding: 8pt; font-size: 10pt; }
+                </style></head>
+                <body>
+                    <div class="header">
+                        <h1>Diagnóstico de Aprendizajes 2026</h1>
+                        <p style="font-size: 10pt; color: #666;">Reporte Pedagógico Oficial - Generado el ${fecha}</p>
+                    </div>
+
+                    <table class="meta-table">
+                        <tr>
+                            <td><div class="label">Institución</div><div class="value">${inst}</div></td>
+                            <td><div class="label">Área Curricular</div><div class="value">${area}</div></td>
+                        </tr>
+                        <tr>
+                            <td><div class="label">Grado y Sección</div><div class="value">${grado}</div></td>
+                            <td><div class="label">Ciclo</div><div class="value">${ciclo}</div></td>
+                        </tr>
+                    </table>
+
+                    <div class="section-title">Resultados por Indicador</div>
+                    <table class="stats-table">
+                        ${statsHtml}
+                    </table>
+
+                    <div class="section-title">Análisis de Planificación Curricular (IA)</div>
+                    <div class="conclusiones-txt">
+                        ${document.getElementById('textoConclusiones').innerHTML}
+                    </div>
+                </body></html>
+            `;
+
+            const blob = new Blob(['\ufeff', wordHtml], { type: 'application/msword' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = `Informe_Pedagogico_${area.replace(/ /g, '_')}_2026.doc`;
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+
+</html>

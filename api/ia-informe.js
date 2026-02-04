@@ -24,11 +24,11 @@ export default async function handler(req, res) {
         const sql = `
       SELECT 
         i.descripcion_indicador as indicador,
-        COUNT(CASE WHEN r.nivel_logro = 1 THEN 1 END) as inicio,
-        COUNT(CASE WHEN r.nivel_logro = 2 THEN 1 END) as proceso,
-        COUNT(CASE WHEN r.nivel_logro = 3 THEN 1 END) as logro,
-        COUNT(CASE WHEN r.nivel_logro = 4 THEN 1 END) as destacado,
-        COUNT(*) as total
+        CAST(COUNT(CASE WHEN r.nivel_logro = 1 THEN 1 END) AS INTEGER) as inicio,
+        CAST(COUNT(CASE WHEN r.nivel_logro = 2 THEN 1 END) AS INTEGER) as proceso,
+        CAST(COUNT(CASE WHEN r.nivel_logro = 3 THEN 1 END) AS INTEGER) as logro,
+        CAST(COUNT(CASE WHEN r.nivel_logro = 4 THEN 1 END) AS INTEGER) as destacado,
+        CAST(COUNT(*) AS INTEGER) as total
       FROM resultados_estudiantes r
       JOIN indicadores_evaluacion i ON r.indicador_id = i.id
       WHERE r.evaluacion_id = $1
@@ -37,13 +37,26 @@ export default async function handler(req, res) {
 
         const stats = await query(sql, [evaluacion_id]);
 
-        // 2. Generar Prompt para la IA
-        let promptContext = "Eres un especialista pedagógico del MINEDU Perú. Analiza los siguientes resultados cuantitativos de una evaluación diagnóstica de secundaria y redacta 'Conclusiones Descriptivas' (máximo 150 palabras). Enfócate en las necesidades de aprendizaje identificadas. Usa terminología pedagógica formal (CNEB).\n\nResultados por Indicador:\n";
+        // 2. Generar Prompt enriquecido para la IA
+        let promptContext = `Eres un especialista pedagógico de alto nivel del MINEDU Perú. Analiza los resultados de esta evaluación diagnóstica y redacta un INFORME DE PLANIFICACIÓN CURRICULAR.
+        
+        IMPORTANTE: Responde ÚNICAMENTE en formato HTML limpio (sin etiquetas <html> o <body>). 
+        Usa etiquetas <h3> para subtítulos, <p> para párrafos y <table> (con bordes) para la hoja de ruta.
+        
+        Estructura requerida:
+        1. <h3>CONCLUSIONES DESCRIPTIVAS</h3>: Resumen del estado actual.
+        2. <h3>PRIORIDADES PARA LA UNIDAD 1</h3>: Competencias, capacidades y temas a priorizar.
+        3. <h3>HOJA DE RUTA PARA UNIDADES POSTERIORES</h3>: Una TABLA HTML con columnas: Unidad, Foco Pedagógico, Progresión del Estándar.
+
+        Usa un lenguaje técnico-pedagógico basado en el CNEB.
+        
+        Resultados por Indicador:
+        `;
 
         stats.rows.forEach(row => {
-            // Calcular porcentajes simples para darle contexto a la IA
             const pInicio = Math.round((row.inicio / row.total) * 100);
-            promptContext += `- En el indicador "${row.indicador}": El ${pInicio}% está en Inicio (dificultad alta).\n`;
+            const pLogro = Math.round((row.logro / row.total) * 100);
+            promptContext += `- "${row.indicador}": ${pInicio}% en Inicio (C), ${pLogro}% en Logro (A).\n`;
         });
 
         // 3. Llamar a Gemini API (Google)

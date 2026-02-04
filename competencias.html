@@ -1,35 +1,219 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
-  <title>Paso 3 – Competencias</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paso 3: Definición de Competencias - SIED</title>
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/tutorial.css">
+  <link rel="stylesheet" href="css/components.css">
+  <style>
+    /* Estilos para las tarjetas de competencia */
+    #listaCompetencias {
+      display: grid;
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .competencia-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 20px;
+      background: var(--theme-card-bg);
+      border: 2px solid var(--theme-border);
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .competencia-card:hover {
+      border-color: var(--primary-color);
+      transform: translateY(-4px) scale(1.01);
+      box-shadow: 0 12px 24px var(--theme-shadow);
+    }
+
+    .competencia-card.selected {
+      border-color: #4facfe;
+      background: rgba(79, 172, 254, 0.1);
+      box-shadow: 0 8px 20px rgba(79, 172, 254, 0.2);
+    }
+
+    .competencia-card input[type="checkbox"] {
+      width: 24px;
+      height: 24px;
+      margin-top: 2px;
+    }
+
+    .competencia-info {
+      flex: 1;
+    }
+
+    .competencia-nome {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--theme-text-primary);
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .competencia-desc {
+      font-size: 0.9rem;
+      color: var(--theme-text-secondary);
+      line-height: 1.5;
+    }
+
+    body.dark-mode .competencia-card {
+      background: rgba(40, 40, 60, 0.4);
+    }
+
+    body.dark-mode .competencia-card.selected {
+      background: rgba(79, 172, 254, 0.15);
+    }
+  </style>
 </head>
-<body>
 
-<main class="container">
-  <h2>Paso 3: Definición de Competencias</h2>
+<body class="dark-mode">
 
-  <div class="card">
-    <p>
-      Seleccione las competencias que serán evaluadas en la evaluación diagnóstica,
-      según el área curricular seleccionada.
-    </p>
-
-    <div id="listaCompetencias"></div>
-
-    <button class="btn-primary" onclick="guardarCompetencias()">
-      Siguiente
-    </button>
+  <div class="theme-toggle" onclick="document.body.classList.toggle('dark-mode')">
+    <span class="theme-toggle-icon">🌓</span>
+    <span class="theme-toggle-text">Modo Visual</span>
   </div>
-</main>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="js/app.js"></script>
+  <div class="tutorial-layout">
+    <!-- Panel Izquierdo: Orientación Técnica MINEDU -->
+    <aside class="panel-tutorial panel-tecnico">
+      <h3>🧭 Brújula Técnica</h3>
+      <div class="tutorial-content">
+        <span class="badge badge-primary" style="margin-bottom: 16px;">Paso 3 de 8</span>
 
-<script>
-  cargarCompetencias();
-</script>
+        <h4>Definir las Competencias</h4>
+        <p>No evalúes todo. Evaluar es una decisión pedagógica. Elige las competencias que sospechas que son más
+          difíciles para ellos o aquellas que son fundamentales para el grado.</p>
 
+        <div class="alert alert-success" style="margin-top: 24px;">
+          <div class="alert-message">
+            <strong>📖 Eje Transversal: Comprensión Lectora</strong><br>
+            La competencia <em>"Lee diversos tipos de textos"</em> es el motor del aula. Si no comprenden, no aprenden.
+          </div>
+        </div>
+
+        <h4>Criterios de Priorización:</h4>
+        <ul>
+          <li><strong>Relevancia:</strong> ¿Es un cimiento para futuros aprendizajes?</li>
+          <li><strong>Pertinencia:</strong> ¿Se conecta con el contexto identificado en el Paso 1?</li>
+          <li><strong>Viabilidad:</strong> ¿Tengo el tiempo y las herramientas para evaluarla?</li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Contenido Central: Formulario -->
+    <main class="main-content">
+      <div class="container">
+        <header class="step-header-container">
+          <span class="step-number-badge">Paso 3</span>
+          <h1 class="step-title">Selección de Competencias</h1>
+          <p class="step-subtitle">Determina qué áreas del aprendizaje serán evaluadas con mayor prioridad este año.</p>
+        </header>
+
+        <div class="card">
+          <!-- Banner de Enfoque -->
+          <div class="alert alert-warning" style="margin-bottom: 32px;">
+            <div class="alert-title">
+              <span>🎯</span>
+              Enfoque Pedagógico 2026
+            </div>
+            <div class="alert-message">
+              <p>Considera integrar competencias transversales. La lectura y la autonomía digital son claves para el
+                éxito en cualquier área curricular.</p>
+            </div>
+          </div>
+
+          <h3>🎯 Mapa de Competencias</h3>
+          <p style="opacity: 0.8;">Selecciona las competencias que priorizarás en tu diagnóstico:</p>
+
+          <div id="listaCompetencias">
+            <!-- Dinámico vía cargarCompetencias() -->
+          </div>
+
+          <div class="alert alert-info" style="margin-top: 32px;">
+            <div class="alert-message">
+              <strong>💡 Sugerencia:</strong> Selecciona de 2 a 4 competencias. Profundidad es mejor que cobertura.
+            </div>
+          </div>
+
+          <button class="btn-primary" id="btnGuardar" onclick="guardarCompetencias()">
+            💾 Guardar y Definir Estándares
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Panel Derecho: Ejemplo Práctico -->
+    <aside class="panel-tutorial panel-real">
+      <div class="ia-badge">✨ Ejemplo Estratégico</div>
+      <h3>🍎 Voz Docente</h3>
+      <div class="tutorial-content">
+        <span class="badge badge-warning" style="margin-bottom: 16px;">Caso: Ciencia y Tecnología</span>
+
+        <p><strong>El Dilema:</strong> "Tengo 3 competencias, ¿evalúo todas?"</p>
+
+        <p style="margin-top: 15px;"><strong>La Decisión:</strong> "Elegiré <em>'Indaga mediante métodos
+            científicos'</em> y <em>'Lee diversos tipos de textos'</em>. ¿Por qué? Porque mis alumnos dibujan bien
+          (Crea), pero no saben interpretar un gráfico científico (Lee). Si no saben leer datos, no podrán indagar."</p>
+
+        <div class="alert alert-info" style="margin-top: 24px;">
+          <div class="alert-title">🎯 Resultado esperado</div>
+          <div class="alert-message">
+            Un diagnóstico enfocado que permita identificar brechas exactas en la lectura de información técnica.
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script src="js/components.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    window.onload = () => {
+      if (typeof updateSteps === 'function') updateSteps(3, 8);
+
+      // Sobrescribimos cargarCompetencias para dar estilo premium
+      const originalCargarCompetencias = window.cargarCompetencias;
+      window.cargarCompetencias = function () {
+        const ev = obtenerEvaluacion();
+        const cont = document.getElementById("listaCompetencias");
+        cont.innerHTML = "";
+
+        const competencias = competenciasPorArea[ev.area] || [];
+        competencias.forEach(comp => {
+          const card = document.createElement('div');
+          card.className = 'competencia-card';
+          card.innerHTML = `
+            <input type="checkbox" class="competencia" value="${comp}" onchange="this.closest('.competencia-card').classList.toggle('selected')">
+            <div class="competencia-info">
+              <span class="competencia-nome">${comp}</span>
+              <span class="competencia-desc">Evaluación del nivel de desarrollo de esta capacidad según el CNEB.</span>
+            </div>
+          `;
+          card.onclick = function (e) {
+            if (e.target.type !== 'checkbox') {
+              const check = this.querySelector('input');
+              check.checked = !check.checked;
+              this.classList.toggle('selected');
+            }
+          };
+          cont.appendChild(card);
+        });
+      };
+
+      cargarCompetencias();
+      if (typeof cargarTutorial === 'function') cargarTutorial();
+    };
+  </script>
 </body>
+
 </html>
