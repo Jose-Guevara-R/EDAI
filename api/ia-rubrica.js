@@ -22,20 +22,23 @@ export default async function handler(req, res) {
             Área: ${area}
             Grado: ${grado}
             
-            Para cada uno de los siguientes criterios, redacta brevemente qué se espera en cada nivel:
-            Criterios:
+            Inputs Sucios (Limpia el texto antes de procesar):
             ${criterios.map((c, i) => `${i + 1}. ${c}`).join('\n')}
             
-            FORMATO DE RESPUESTA (Solo JSON, sin markdown):
-            Devuelve un array de objetos con esta estructura:
+            INSTRUCCIONES:
+            1. Lee cada criterio. Si dice "Misión 1..." o similar, extrae solo la ACCIÓN PEDAGÓGICA (ej: "Elaborar prototipo").
+            2. Redacta descriptores ESPECÍFICOS para ese contenido.
+               - MALO: "No lo hace."
+               - BUENO: "El prototipo no cumple con las medidas especificadas."
+            
+            FORMATO DE RESPUESTA (Solo JSON array):
             [
               {
-                "criterio": "Texto del criterio original",
-                "inicio": "Descripción corta del nivel Inicio (C)",
-                "proceso": "Descripción corta del nivel Proceso (B)",
-                "logro": "Descripción corta del nivel Logro (A)"
-              },
-              ...
+                "criterio": "Texto limpio de la acción (ej: Elaboración de prototipo)",
+                "inicio": "Descriptor específico nivel Inicio",
+                "proceso": "Descriptor específico nivel Proceso",
+                "logro": "Descriptor específico nivel Logro"
+              }
             ]
         `;
 

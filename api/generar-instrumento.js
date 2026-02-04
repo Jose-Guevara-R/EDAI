@@ -21,8 +21,19 @@ export default async function handler(req, res) {
         evidenciasArray = evidencias_texto.split('\n');
     }
 
-    // Filtramos vacíos
-    evidenciasArray = evidenciasArray.map(t => t.trim()).filter(t => t.length > 0);
+    // Filtramos vacíos y LIMPIAMOS prefijos heredados de la gamificación
+    evidenciasArray = evidenciasArray
+        .map(t => {
+            // Elimina prefijos como "Misión 1:", "Misión 2 (En base a:", "Evidencia:"
+            let limpio = t.replace(/^Misión\s+\d+.*?\(\s*En\s*base\s*a\s*:\s*/i, '') // Quita "Misión 1 (En base a: "
+                .replace(/^Misión\s+\d+\s*:\s*/i, '') // Quita "Misión 1:"
+                .replace(/\)\s*$/, '') // Quita paréntesis final si quedó
+                .replace(/^-\s*/, '') // Quita guiones iniciales
+                .trim();
+            // Si el regex falló o no coincide, devuelve el original pero trimmeado
+            return limpio || t.trim();
+        })
+        .filter(t => t.length > 0);
 
     try {
         // 1. Obtener datos básicos
