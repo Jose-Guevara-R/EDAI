@@ -826,17 +826,19 @@ async function sugerirEvidencias() {
     const data = await res.json();
 
     if (data.sugerencias) {
+      console.log("[IA SUCCESS] Evidencias recibidas de Gemini");
       if (txtArea) {
         // Limpiar formato markdown si viene con ** o *
         let textoLimpio = data.sugerencias.replace(/\*\*/g, "").replace(/\*/g, "•");
         txtArea.value = textoLimpio;
       }
+      if (btn) btn.innerHTML = "✨ IA Generativa (Éxito)";
     } else {
       throw new Error("No se recibieron sugerencias de la IA");
     }
 
   } catch (error) {
-    console.warn("Fallo IA Evidencias, usando banco local:", error);
+    console.warn("[IA FAIL] Fallo IA Evidencias, usando banco local:", error);
 
     // 2. Fallback al banco local si falla la IA
     let sugerencias = [];
@@ -853,11 +855,14 @@ async function sugerirEvidencias() {
     }
 
     if (txtArea) txtArea.value = sugerencias.join("\n");
+    if (btn) btn.innerHTML = "⚠️ Modo Offline (Respaldo)";
   } finally {
-    if (btn) {
-      btn.innerHTML = "🔁 Regenerar Sugerencia Pedagógica";
-      btn.disabled = false;
-    }
+    setTimeout(() => {
+      if (btn) {
+        btn.innerHTML = "🔁 Regenerar Sugerencia Pedagógica";
+        btn.disabled = false;
+      }
+    }, 3000); // Mantener el estado visual unos segundos
   }
 }
 
@@ -1716,13 +1721,25 @@ async function generarContenidoExamen() {
     ev.actividadesGeneradas = data.desafios;
     guardarEvaluacion(ev);
 
+    // DETERMINAR SI ES IA O FALLBACK (Buscamos una marca en el título o contenido)
+    const esIA = !data.titulo_examen.includes("RETO DE APRENDIZAJE"); // El fallback usa "RETO DE APRENDIZAJE" hardcoded
+
+    if (esIA) {
+      console.log("[IA SUCCESS] Ficha generada por Gemini");
+      contenedor.innerHTML = `<div style="text-align:center; margin-bottom: 20px;"><span class="badge badge-ai">✨ Generado con Inteligencia Artificial</span></div>`;
+    } else {
+      console.warn("[IA FAIL] Usando generador de respaldo");
+      contenedor.innerHTML = `<div style="text-align:center; margin-bottom: 20px;"><span class="badge badge-warning">⚠️ Modo Offline (Generador Local)</span></div>`;
+    }
+
     if (data.texto_estimulo) {
       // Título de la evaluación generado por IA
       if (data.titulo_examen) {
-        document.querySelector(".examen-header p").textContent = data.titulo_examen;
+        const headerTitle = document.querySelector(".examen-header p");
+        if (headerTitle) headerTitle.textContent = data.titulo_examen;
       }
 
-      let html = "";
+      let html = contenedor.innerHTML; // Mantener el badge
 
       // 1. Renderizar el Texto Estímulo (Lectura de entrada)
       html += `
@@ -1769,7 +1786,7 @@ async function generarContenidoExamen() {
     }
 
   } catch (e) {
-    console.error(e);
+    console.error("[IA CRITICAL ERROR]", e);
     contenedor.innerHTML = "<p style='color:red;'>Error conectando con la IA. Intente recargar.</p>";
   } finally {
     if (btnRegenerar) {
@@ -1898,12 +1915,13 @@ async function generarCriteriosIA() {
 
     const data = await res.json();
     if (data.criterios) {
+      console.log("[IA SUCCESS] Criterios generados por Gemini");
       document.getElementById("criterios").value = data.criterios;
       showAlert("success", "IA - Criterios", "Criterios generados basándose en tu secuencia pedagógica.");
     }
   } catch (err) {
-    console.error("Error IA Criterios:", err);
-    showAlert("danger", "Error", "No se pudo conectar con la IA. Inténtalo de nuevo.");
+    console.error("[IA FAIL] Error IA Criterios:", err);
+    showAlert("warning", "Modo Offline", "No se pudo conectar con la IA. Usando criterios estándar.");
   } finally {
     hideLoading();
   }
