@@ -1685,7 +1685,16 @@ async function generarContenidoExamen() {
   const btnRegenerar = document.querySelector("button[onclick='generarContenidoExamen()']");
 
   // Fuente de verdad única: evidencias seleccionadas en el paso anterior
-  const indicadores = ev.evidenciasSeleccionadas || ev.evidencias || [];
+  let indicadores = ev.evidenciasSeleccionadas || ev.evidencias || [];
+
+  // LIMPIEZA PREVENTIVA DE INDICADORES (Por si vienen sucios de pasos anteriores)
+  indicadores = indicadores.map(ind => {
+    return ind.replace(/^Misión\s+\d+.*?\(\s*En\s*base\s*a\s*:\s*/i, '') // Quita "Misión X (En base a: "
+      .replace(/^Misión\s+\d+\s*:\s*/i, '')
+      .replace(/\)\s*$/, '')
+      .replace(/^-\s*/, '')
+      .trim();
+  }).filter(t => t.length > 0);
 
   if (indicadores.length === 0) {
     contenedor.innerHTML = "<p>No hay indicadores seleccionados para generar preguntas.</p>";
@@ -1959,13 +1968,19 @@ function exportarInstrumentoWord() {
         `;
       }
     });
-  } else if (ev.instrumentoDiagnostico) {
     // Fallback al objeto guardado si no hay tabla en el DOM (poco probable si está en el Paso 8)
     ev.instrumentoDiagnostico.forEach((item, i) => {
+      // Limpieza de emergencia al exportar
+      const evidenciaLimpia = item.evidencia
+        .replace(/^Misión\s+\d+.*?\(\s*En\s*base\s*a\s*:\s*/i, '')
+        .replace(/^Misión\s+\d+\s*:\s*/i, '')
+        .replace(/\)\s*$/, '')
+        .trim();
+
       tablaHtml += `
         <tr>
           <td style="border: 1pt solid #000; padding: 5pt; text-align: center;">${i + 1}</td>
-          <td style="border: 1pt solid #000; padding: 5pt;"><b>${item.competencia}</b><br>${item.evidencia}</td>
+          <td style="border: 1pt solid #000; padding: 5pt;"><b>${item.competencia}</b><br>${evidenciaLimpia}</td>
           <td style="border: 1pt solid #000; padding: 5pt; font-size: 9pt;">${item.inicio}</td>
           <td style="border: 1pt solid #000; padding: 5pt; font-size: 9pt;">${item.proceso}</td>
           <td style="border: 1pt solid #000; padding: 5pt; font-size: 9pt;">${item.logro}</td>
